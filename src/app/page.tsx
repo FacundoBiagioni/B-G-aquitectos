@@ -1,65 +1,222 @@
-import Image from "next/image";
+import Link from "next/link";
+import ProjectCard from "@/components/ProjectCard";
+import ProjectImage from "@/components/ProjectImage";
+import { getFeaturedProjects } from "@/data/projects";
+import { homeCover } from "@/data/site";
 
-export default function Home() {
+export default function HomePage() {
+  const featured = getFeaturedProjects();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <>
+      {/* HERO */}
+      <section className="relative h-screen min-h-[600px] flex items-end overflow-hidden">
+        <div className="absolute inset-0 bg-[var(--bg-surface)]">
+          <ProjectImage
+            src={homeCover.src}
+            alt={homeCover.alt}
+            fill
+            priority
+            className="object-cover object-center opacity-85"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-[var(--bg)]/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/50 to-transparent" />
+        </div>
+
+        <div className="relative z-10 max-w-[1400px] mx-auto px-6 md:px-10 pb-20 w-full">
+          <div className="max-w-3xl">
+            <p className="text-[var(--accent)] text-xs tracking-[0.3em] uppercase mb-6">
+              Estudio B+G — La Plata, Argentina
+            </p>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light leading-[1.05] tracking-tight text-[var(--text-primary)] mb-8">
+              Arquitectura
+              <br />
+              <span className="text-[var(--text-secondary)]">elegante, honesta</span>
+              <br />
+              y contemporánea.
+            </h1>
+            <p className="text-[var(--text-secondary)] text-base md:text-lg font-light leading-relaxed max-w-xl mb-10">
+              Diseñamos edificios, casas y proyectos únicos en La Plata.
+              Materialidad, calidad espacial y luz natural en equilibrio.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Link
+                href="/proyectos"
+                className="px-8 py-3.5 bg-[var(--text-primary)] text-[var(--bg)] text-xs tracking-[0.15em] uppercase font-medium hover:bg-[var(--accent)] transition-colors duration-300"
+              >
+                Ver proyectos
+              </Link>
+              <Link
+                href="/contacto"
+                className="px-8 py-3.5 border border-[var(--border)] text-[var(--text-secondary)] text-xs tracking-[0.15em] uppercase hover:border-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-300"
+              >
+                Consultanos
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 right-10 hidden md:flex flex-col items-center gap-2">
+          <span className="text-[var(--text-muted)] text-[10px] tracking-[0.3em] uppercase [writing-mode:vertical-rl]">
+            Scroll
+          </span>
+          <div className="w-px h-12 bg-gradient-to-b from-[var(--text-muted)] to-transparent" />
+        </div>
+      </section>
+
+      {/* FEATURED PROJECTS */}
+      <section className="py-24 max-w-[1400px] mx-auto px-6 md:px-10">
+        <div className="flex items-end justify-between mb-12">
+          <div>
+            <p className="text-[var(--accent)] text-[10px] tracking-[0.3em] uppercase mb-3">
+              Portfolio
+            </p>
+            <h2 className="text-3xl md:text-4xl font-light tracking-tight">
+              Proyectos destacados
+            </h2>
+          </div>
+          <Link
+            href="/proyectos"
+            className="hidden sm:flex items-center gap-2 text-[var(--text-secondary)] text-xs tracking-[0.15em] uppercase hover:text-[var(--text-primary)] transition-colors group"
+          >
+            Ver todos
+            <span className="group-hover:translate-x-1 transition-transform">→</span>
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-[var(--border)]">
+          {featured.map((project, i) => (
+            <div key={project.slug} className="bg-[var(--bg)]">
+              <ProjectCard project={project} priority={i === 0} />
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-6 sm:hidden">
+          <Link
+            href="/proyectos"
+            className="flex items-center gap-2 text-[var(--text-secondary)] text-xs tracking-[0.15em] uppercase hover:text-[var(--text-primary)] transition-colors group"
+          >
+            Ver todos los proyectos
+            <span className="group-hover:translate-x-1 transition-transform">→</span>
+          </Link>
+        </div>
+      </section>
+
+      {/* MANIFESTO */}
+      <section className="border-t border-[var(--border)] py-24">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+            <div>
+              <p className="text-[var(--accent)] text-[10px] tracking-[0.3em] uppercase mb-6">
+                Sobre el estudio
+              </p>
+              <p className="text-2xl md:text-3xl font-light leading-snug text-[var(--text-primary)] max-w-lg">
+                Diseño, materialidad y calidad espacial en equilibrio.
+              </p>
+            </div>
+            <div className="flex flex-col gap-6">
+              <p className="text-[var(--text-secondary)] leading-relaxed">
+                Estudio B+G es un estudio de arquitectura con sede en Gonnet, La Plata,
+                fundado por los arquitectos José Luis Biagioni y Kevin Gershanik.
+                Con formación en la UNLP y el{" "}
+                <strong className="text-[var(--text-primary)] font-normal">
+                  Politécnico de Milán
+                </strong>
+                , desarrollamos proyectos de vivienda, edificios en altura y arquitectura
+                comercial en toda la región.
+              </p>
+              <p className="text-[var(--text-secondary)] leading-relaxed">
+                Nuestro lenguaje se apoya en el{" "}
+                <strong className="text-[var(--text-primary)] font-normal">
+                  hormigón visto
+                </strong>
+                , la madera natural, el vidrio y la vegetación integrada. Cada proyecto
+                busca la máxima luz natural y una relación fluida entre interior y exterior.
+              </p>
+              <Link
+                href="/nosotros"
+                className="self-start flex items-center gap-2 text-[var(--accent)] text-xs tracking-[0.15em] uppercase hover:gap-3 transition-all group"
+              >
+                Conocer el equipo
+                <span className="group-hover:translate-x-1 transition-transform">→</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SERVICIOS */}
+      <section className="border-t border-[var(--border)] py-24 bg-[var(--bg-surface)]">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10">
+          <p className="text-[var(--accent)] text-[10px] tracking-[0.3em] uppercase mb-12">
+            Servicios
           </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[var(--border)]">
+            {[
+              {
+                title: "Proyecto",
+                description:
+                  "Anteproyecto, proyecto ejecutivo y documentación técnica completa para obra.",
+              },
+              {
+                title: "Dirección de obra",
+                description:
+                  "Supervisión y coordinación integral de la construcción, asegurando la materialización del diseño.",
+              },
+              {
+                title: "Consultoría",
+                description:
+                  "Asesoramiento en diseño, materiales, inversión y gerenciamiento de proyectos.",
+              },
+            ].map((service) => (
+              <div
+                key={service.title}
+                className="bg-[var(--bg-surface)] p-8 hover:bg-[var(--bg-elevated)] transition-colors duration-200"
+              >
+                <h3 className="text-[var(--text-primary)] font-light text-lg mb-3">
+                  {service.title}
+                </h3>
+                <p className="text-[var(--text-secondary)] text-sm leading-relaxed">
+                  {service.description}
+                </p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8">
+            <Link
+              href="/servicios"
+              className="flex items-center gap-2 text-[var(--text-secondary)] text-xs tracking-[0.15em] uppercase hover:text-[var(--text-primary)] transition-colors group"
+            >
+              Ver todos los servicios
+              <span className="group-hover:translate-x-1 transition-transform">→</span>
+            </Link>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      </section>
+
+      {/* CTA CONTACTO */}
+      <section className="py-24 border-t border-[var(--border)]">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 text-center">
+          <p className="text-[var(--accent)] text-[10px] tracking-[0.3em] uppercase mb-6">
+            Empecemos juntos
+          </p>
+          <h2 className="text-3xl md:text-5xl font-light tracking-tight mb-6 max-w-2xl mx-auto">
+            ¿Tenés un proyecto en mente?
+          </h2>
+          <p className="text-[var(--text-secondary)] max-w-md mx-auto mb-10 leading-relaxed">
+            Contanos sobre tu proyecto. Trabajamos con viviendas en barrios privados,
+            edificios en altura y arquitectura comercial en La Plata y alrededores.
+          </p>
+          <Link
+            href="/contacto"
+            className="inline-flex items-center gap-3 px-10 py-4 bg-[var(--text-primary)] text-[var(--bg)] text-xs tracking-[0.15em] uppercase font-medium hover:bg-[var(--accent)] hover:text-[var(--bg)] transition-colors duration-300"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            Consultanos sobre tu proyecto
+          </Link>
         </div>
-      </main>
-    </div>
+      </section>
+    </>
   );
 }

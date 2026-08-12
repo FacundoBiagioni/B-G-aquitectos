@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 72" fill="none">
+  <!-- B -->
+  <path d="M0 4 H8 V68 H0 V4Z" fill="white"/>
+  <path d="M8 4 H34 C46 4 54 12 54 24 C54 30 51 35 46 38 C52 41 56 47 56 55 C56 66 48 68 36 68 H8 V4Z
+           M16 34 H32 C38 34 46 32 46 24 C46 16 40 12 32 12 H16 V34Z
+           M16 60 H34 C42 60 48 57 48 55 C48 50 44 42 34 42 H16 V60Z" fill="white"/>
+
+  <!-- + -->
+  <rect x="66" y="28" width="4" height="16" fill="white"/>
+  <rect x="60" y="34" width="16" height="4" fill="white"/>
+
+  <!-- G -->
+  <path d="M88 4 H116 C128 4 140 14 140 36 C140 56 130 68 114 68 H88 V4Z
+           M96 60 H112 C122 60 132 52 132 36 C132 20 124 12 114 12 H96 V60Z" fill="white"/>
+  <rect x="112" y="34" width="20" height="8" fill="white"/>
+
+  <!-- ARQUITECTOS -->
+  <text x="0" y="70" font-family="Arial, Helvetica, sans-serif" font-size="8.5" font-weight="300" letter-spacing="4" fill="white" opacity="0.75">ARQUITECTOS</text>
+</svg>

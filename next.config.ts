@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    // Allow unoptimized local images while photos aren't loaded yet
+    unoptimized: process.env.NODE_ENV === "development",
+  },
 };
 
 export default nextConfig;
