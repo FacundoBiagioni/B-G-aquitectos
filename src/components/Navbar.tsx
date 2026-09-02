@@ -56,6 +56,8 @@ export default function Navbar() {
 
   // Menu open always wins over the scroll-hide state, without an extra effect/render.
   const hidden = navHidden && !menuOpen;
+  // The Nosotros hero has its own portrait right under the logo's usual spot — keep the toggle, drop the logo.
+  const hideLogo = pathname === "/nosotros";
 
   return (
     <>
@@ -64,8 +66,14 @@ export default function Navbar() {
           {/* Logo — lingers a beat longer than the toggle on scroll-hide */}
           <Link
             href="/"
+            aria-hidden={hideLogo}
+            tabIndex={hideLogo ? -1 : undefined}
             className={`flex items-center transition-all duration-500 ease-out delay-150 will-change-transform ${
-              hidden ? "opacity-0 -translate-y-3" : "opacity-100 translate-y-0"
+              hideLogo
+                ? "opacity-0 pointer-events-none"
+                : hidden
+                  ? "opacity-0 -translate-y-3"
+                  : "opacity-100 translate-y-0"
             }`}
           >
             <Image

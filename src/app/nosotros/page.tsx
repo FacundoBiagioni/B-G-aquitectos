@@ -73,8 +73,20 @@ const antecedentes = [
 export default function NosotrosPage() {
   return (
     <>
+      {/* Hero */}
+      <div className="relative h-[70vh] min-h-[500px] overflow-hidden bg-[var(--bg-surface)]">
+        <ProjectImage
+          src="/team/fachada b+g.png"
+          alt="Fachada Estudio B+G"
+          fill
+          priority
+          className="object-cover object-[center_32%] opacity-80"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-transparent to-transparent" />
+      </div>
+
       {/* Header */}
-      <div className="pt-32 pb-0 max-w-[1400px] mx-auto px-6 md:px-10">
+      <div className="pt-16 pb-0 max-w-[1400px] mx-auto px-6 md:px-10">
         <p className="text-[var(--accent)] text-[10px] tracking-[0.3em] uppercase mb-4">
           El estudio
         </p>
