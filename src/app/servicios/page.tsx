@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import ConsultanosButton from "@/components/ConsultanosButton";
 
 export const metadata: Metadata = {
   title: "Servicios",
@@ -106,12 +106,9 @@ export default function ServiciosPage() {
           <p className="text-[var(--text-secondary)] mb-8 max-w-md mx-auto">
             Contanos sobre tu proyecto y te contamos cómo podemos trabajar juntos.
           </p>
-          <Link
-            href="/contacto"
-            className="inline-flex px-8 py-3.5 bg-[var(--text-primary)] text-[var(--bg)] text-xs tracking-[0.15em] uppercase font-medium hover:bg-[var(--accent)] transition-colors duration-300"
-          >
+          <ConsultanosButton className="inline-flex px-8 py-3.5 bg-[var(--text-primary)] text-[var(--bg)] text-xs tracking-[0.15em] uppercase font-medium hover:bg-[var(--accent)] transition-colors duration-300">
             Consultanos
-          </Link>
+          </ConsultanosButton>
         </div>
       </section>
     </>

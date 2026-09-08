@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import ConsultanosButton from "./ConsultanosButton";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -42,7 +43,6 @@ export default function Footer() {
               { href: "/proyectos", label: "Proyectos" },
               { href: "/nosotros", label: "Nosotros" },
               { href: "/servicios", label: "Servicios" },
-              { href: "/contacto", label: "Contacto" },
             ].map((link) => (
               <Link
                 key={link.href}
@@ -52,6 +52,9 @@ export default function Footer() {
                 {link.label}
               </Link>
             ))}
+            <ConsultanosButton className="text-left text-[var(--text-secondary)] text-sm hover:text-[var(--text-primary)] transition-colors">
+              Contacto
+            </ConsultanosButton>
           </div>
 
           {/* Contact */}

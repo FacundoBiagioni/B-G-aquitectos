@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import ProjectCard from "@/components/ProjectCard";
 import ProjectImage from "@/components/ProjectImage";
+import ConsultanosButton from "@/components/ConsultanosButton";
 import { getProjectBySlug, projects, typologyLabels, statusLabels } from "@/data/projects";
 
 interface Props {
@@ -175,12 +176,9 @@ export default async function ProjectPage({ params }: Props) {
               <p className="text-[var(--text-secondary)] text-xs leading-relaxed">
                 Contanos sobre tu idea y te respondemos a la brevedad.
               </p>
-              <Link
-                href="/contacto"
-                className="mt-2 px-5 py-2.5 bg-[var(--text-primary)] text-[var(--bg)] text-xs tracking-[0.1em] uppercase text-center hover:bg-[var(--accent)] transition-colors duration-300"
-              >
+              <ConsultanosButton className="mt-2 px-5 py-2.5 bg-[var(--text-primary)] text-[var(--bg)] text-xs tracking-[0.1em] uppercase text-center hover:bg-[var(--accent)] transition-colors duration-300">
                 Consultanos
-              </Link>
+              </ConsultanosButton>
             </div>
           </div>
         </div>

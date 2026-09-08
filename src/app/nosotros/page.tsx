@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import ProjectImage from "@/components/ProjectImage";
+import ConsultanosButton from "@/components/ConsultanosButton";
 
 export const metadata: Metadata = {
   title: "Nosotros",
@@ -132,13 +132,10 @@ export default function NosotrosPage() {
               altura en La Plata, con un lenguaje consistente: hormigón visto, madera natural,
               vidrio y vegetación integrada.
             </p>
-            <Link
-              href="/contacto"
-              className="self-start flex items-center gap-2 text-[var(--accent)] text-xs tracking-[0.15em] uppercase hover:gap-3 transition-all group mt-2"
-            >
+            <ConsultanosButton className="self-start flex items-center gap-2 text-[var(--accent)] text-xs tracking-[0.15em] uppercase hover:gap-3 transition-all group mt-2">
               Hablemos de tu proyecto
               <span className="group-hover:translate-x-1 transition-transform">→</span>
-            </Link>
+            </ConsultanosButton>
           </div>
         </div>
       </section>
@@ -195,12 +192,9 @@ export default function NosotrosPage() {
       <section className="py-20 border-t border-[var(--border)] bg-[var(--bg-surface)]">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10 text-center">
           <h2 className="text-3xl font-light mb-6">¿Trabajamos juntos?</h2>
-          <Link
-            href="/contacto"
-            className="inline-flex px-8 py-3.5 bg-[var(--text-primary)] text-[var(--bg)] text-xs tracking-[0.15em] uppercase font-medium hover:bg-[var(--accent)] transition-colors duration-300"
-          >
+          <ConsultanosButton className="inline-flex px-8 py-3.5 bg-[var(--text-primary)] text-[var(--bg)] text-xs tracking-[0.15em] uppercase font-medium hover:bg-[var(--accent)] transition-colors duration-300">
             Contactar al estudio
-          </Link>
+          </ConsultanosButton>
         </div>
       </section>
     </>

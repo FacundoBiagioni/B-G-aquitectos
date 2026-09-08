@@ -28,18 +28,56 @@ src/app/
   proyectos/[slug]/page.tsx   Ficha de proyecto (generateStaticParams + generateMetadata)
   nosotros/page.tsx      Equipo, formación, antecedentes institucionales
   servicios/page.tsx
-  contacto/page.tsx + ContactForm.tsx (client component)
+  contacto/page.tsx      Ya NO es una página propia — renderiza <HomePage /> + <AutoOpenContact />
+                         (abre el panel de contacto por efecto al montar). Existe solo para que
+                         /contacto no rompa; ver sección "Panel de contacto" abajo.
 src/components/
-  Navbar.tsx    Fixed header, transparente sobre el hero de home, sólido en el resto
+  Navbar.tsx           Fixed header, siempre transparente (sin fondo/borde en ningún estado),
+                       se oculta al bajar scroll y reaparece al subir. El logo se demora un poco
+                       más que el botón de menú al ocultarse (transition-delay).
   Footer.tsx
-  ProjectCard.tsx    Card de proyecto (usada en home, listado y "también en...")
-  ProjectImage.tsx   Wrapper de next/image que hace fallback a /placeholder.svg en onError
+  ProjectCard.tsx      Card de proyecto (usada en home, listado y "también en...")
+  ProjectImage.tsx     Wrapper de next/image que hace fallback a /placeholder.svg en onError
+  PanelProvider.tsx    Contexto compartido (`usePanel()`) que controla cuál de los dos paneles
+                       deslizables de la derecha está abierto: "menu" | "contact" | null.
+  RightPanel.tsx       Shell genérico del panel deslizable (backdrop + panel w-full sm:w-[420px],
+                       misma transición para ambos). Lo usan tanto el menú de Navbar como
+                       ContactPanel — así quedan garantizadas las mismas proporciones.
+  ContactPanel.tsx     Panel de contacto (formulario + datos), montado una vez en layout.tsx.
+  ContactForm.tsx      Envía el formulario a Web3Forms (ver sección de abajo).
+  ConsultanosButton.tsx   Botón que llama a `openContact()` del contexto — reemplaza cualquier
+                       `<Link href="/contacto">` en Home, Servicios, Nosotros, ficha de proyecto
+                       y Footer.
 src/data/
   projects.ts   Modelo Project + array de los 15 proyectos + helpers (getProjectBySlug,
                 getFeaturedProjects, getProjectsByTypology, typologyLabels, statusLabels)
   site.ts       Config suelta del sitio (por ahora solo homeCover)
 public/projects/[slug]/   Imágenes reales copiadas del pendrive, un directorio por proyecto
 ```
+
+## Panel de contacto (reemplaza la página /contacto)
+
+Por decisión explícita del usuario (2026-09-07) ya no hay una página de contacto tradicional.
+En su lugar:
+
+- Un solo `<ContactPanel />` vive montado en `layout.tsx`, dentro de `<PanelProvider>`. Se abre
+  llamando a `openContact()` desde cualquier componente vía `usePanel()`.
+- El menú de navegación (`Navbar.tsx`) y el panel de contacto comparten el mismo slot visual de
+  la derecha (mismo `RightPanel`) y son mutuamente excluyentes: abrir uno cierra el otro. El botón
+  hamburguesa/X del header controla "el panel que esté abierto, sea cual sea".
+- Cualquier CTA de "Consultanos"/"Contacto" en el sitio usa `<ConsultanosButton>` en vez de
+  `<Link href="/contacto">`. Si agregás un nuevo CTA de contacto en cualquier página, usá ese
+  componente — nunca un link a `/contacto`.
+- La ruta `/contacto` se mantiene (por pedido explícito: "que no redirija a ningún lado") pero
+  `src/app/contacto/page.tsx` solo renderiza `<HomePage />` + `<AutoOpenContact />` (un client
+  component que llama `openContact()` en un `useEffect` de montaje). Esto evita un 404 para
+  links viejos sin usar `redirect()`.
+- **Envío real de mail:** el formulario (`ContactForm.tsx`) postea directo desde el cliente a
+  `https://api.web3forms.com/submit` (sin backend propio), usando
+  `process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY`. Esa key es pública por diseño de Web3Forms
+  (no es un secreto) y vive en `.env.local` (gitignoreado por el `.env*` del `.gitignore`, así
+  que cada entorno/deploy necesita la suya). Si el formulario devuelve error "no pudimos enviar
+  el mensaje", lo primero a chequear es si esa variable está seteada.
 
 ## Convenciones de diseño
 
@@ -66,13 +104,12 @@ algo "ya está", verificar:
    antes de tocar un proyecto). Hoy esas imágenes caen al placeholder por el `onError` de
    `ProjectImage`. Para arreglar un proyecto: mirar qué archivos hay realmente en su carpeta y
    actualizar `heroImage`/`gallery` en `projects.ts` para que apunten a los nombres reales.
-2. **Foto de equipo rota.** `nosotros/page.tsx` referencia `/team/equipo.jpg`; `public/team/`
-   está vacía. Falta pedir/copiar esa foto (el informe menciona 6 fotos en la carpeta `Equipo\`
-   del pendrive original).
+2. ~~Foto de equipo rota~~ — resuelto. `public/team/equipo.jpg` existe (el usuario la agregó).
 3. **`public/projects/placeholder/`** existe pero está vacía — no se está usando.
-4. **Formulario de contacto no envía nada.** `ContactForm.tsx` simula el envío con un
-   `setTimeout`; hay un comentario explícito para integrar un servicio real (Resend, Formspree,
-   etc.). No está conectado a ningún backend.
+4. **Formulario de contacto conectado a Web3Forms, pero falta la Access Key real.** Ver sección
+   "Panel de contacto" más arriba. Sin `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` en `.env.local`, el
+   formulario cae siempre en el estado de error ("no pudimos enviar el mensaje"). El usuario
+   tiene que crear la cuenta gratuita en web3forms.com y pasar la key.
 5. **Dominio sin confirmar.** `layout.tsx` tiene `openGraph.url: "https://estudioarqbg.com"`
    como placeholder — no está verificado que sea el dominio real que se va a usar.
 6. **Sin `sitemap.ts` ni `robots.ts`** en `src/app/` todavía, pese a que el informe los pide.
@@ -80,12 +117,7 @@ algo "ya está", verificar:
    y Nosotros.
 8. **Videos de obra sin incorporar** (el informe menciona `.mp4` de la carpeta de E25 como
    candidato para el hero).
-9. **Logo:** hay `logo-bg.png`, `logo-bg.svg` y `B+G ARQUITECTOS-blanco.png` en `public/` ya
-   cargados y en uso en el Navbar — este punto del informe (que decía que no había vector
-   fácil) ya está resuelto.
-10. **Un solo commit en el repo** ("Initial commit from Create Next App"): todo lo demás
-    (páginas, componentes, datos, imágenes) está sin commitear. Confirmar con el usuario antes
-    de armar commits grandes — puede preferir revisarlo por partes.
+9. ~~Logo vectorial~~ — resuelto, ya está en uso en Navbar/Footer.
 
 ## Notas de sesión
 

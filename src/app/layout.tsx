@@ -3,6 +3,8 @@ import { Geist } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { PanelProvider } from "@/components/PanelProvider";
+import ContactPanel from "@/components/ContactPanel";
 
 const geist = Geist({
   variable: "--font-geist-sans",
@@ -49,9 +51,12 @@ export default function RootLayout({
   return (
     <html lang="es" className={`${geist.variable} h-full`}>
       <body className="min-h-full flex flex-col bg-[var(--bg)] text-[var(--text-primary)] antialiased">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <PanelProvider>
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <ContactPanel />
+        </PanelProvider>
       </body>
     </html>
   );

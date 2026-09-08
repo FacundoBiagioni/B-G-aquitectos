@@ -1,6 +1,7 @@
 import Link from "next/link";
 import ProjectCard from "@/components/ProjectCard";
 import ProjectImage from "@/components/ProjectImage";
+import ConsultanosButton from "@/components/ConsultanosButton";
 import { getFeaturedProjects } from "@/data/projects";
 import { homeCover } from "@/data/site";
 
@@ -46,12 +47,9 @@ export default function HomePage() {
               >
                 Ver proyectos
               </Link>
-              <Link
-                href="/contacto"
-                className="px-8 py-3.5 border border-[var(--border)] text-[var(--text-secondary)] text-xs tracking-[0.15em] uppercase hover:border-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-300"
-              >
+              <ConsultanosButton className="px-8 py-3.5 border border-[var(--border)] text-[var(--text-secondary)] text-xs tracking-[0.15em] uppercase hover:border-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-300">
                 Consultanos
-              </Link>
+              </ConsultanosButton>
             </div>
           </div>
         </div>
@@ -209,12 +207,9 @@ export default function HomePage() {
             Contanos sobre tu proyecto. Trabajamos con viviendas en barrios privados,
             edificios en altura y arquitectura comercial en La Plata y alrededores.
           </p>
-          <Link
-            href="/contacto"
-            className="inline-flex items-center gap-3 px-10 py-4 bg-[var(--text-primary)] text-[var(--bg)] text-xs tracking-[0.15em] uppercase font-medium hover:bg-[var(--accent)] hover:text-[var(--bg)] transition-colors duration-300"
-          >
+          <ConsultanosButton className="inline-flex items-center gap-3 px-10 py-4 bg-[var(--text-primary)] text-[var(--bg)] text-xs tracking-[0.15em] uppercase font-medium hover:bg-[var(--accent)] hover:text-[var(--bg)] transition-colors duration-300">
             Consultanos sobre tu proyecto
-          </Link>
+          </ConsultanosButton>
         </div>
       </section>
     </>
