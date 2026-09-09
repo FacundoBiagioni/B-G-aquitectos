@@ -96,13 +96,26 @@ export default function NosotrosPage() {
       {/* Intro */}
       <section className="py-16 max-w-[1400px] mx-auto px-6 md:px-10 border-b border-[var(--border)]">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-          <div className="relative aspect-[3/4] bg-[var(--bg-surface)] overflow-hidden">
-            <ProjectImage
-              src="/team/equipo.jpg"
-              alt="José Luis Biagioni y Kevin Gershanik"
-              fill
-              className="object-cover"
-            />
+          <div className="flex flex-col gap-4">
+            <div className="relative aspect-[3/4] bg-[var(--bg-surface)] overflow-hidden">
+              <ProjectImage
+                src="/team/equipo.png"
+                alt="José Luis Biagioni y Kevin Gershanik"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="relative aspect-video bg-[var(--bg-surface)] overflow-hidden">
+                <ProjectImage
+                  src="/team/equipo2.png"
+                  alt="Equipo de trabajo de Estudio B+G"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <p className="text-[var(--text-muted)] text-sm">Con el resto del equipo</p>
+            </div>
           </div>
           <div className="flex flex-col gap-6 md:pt-4">
             <p className="text-2xl md:text-3xl font-light leading-snug text-[var(--text-primary)]">
