@@ -83,11 +83,9 @@ export default function HomePage() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-[var(--border)]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 md:gap-x-8 gap-y-12 md:gap-y-16">
           {featured.map((project, i) => (
-            <div key={project.slug} className="bg-[var(--bg)]">
-              <ProjectCard project={project} priority={i === 0} />
-            </div>
+            <ProjectCard key={project.slug} project={project} priority={i === 0} />
           ))}
         </div>
 

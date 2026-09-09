@@ -199,11 +199,9 @@ export default async function ProjectPage({ params }: Props) {
                 Ver todos →
               </Link>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[var(--border)]">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 md:gap-x-8 gap-y-12">
               {otherProjects.map((p) => (
-                <div key={p.slug} className="bg-[var(--bg-surface)]">
-                  <ProjectCard project={p} />
-                </div>
+                <ProjectCard key={p.slug} project={p} />
               ))}
             </div>
           </div>
