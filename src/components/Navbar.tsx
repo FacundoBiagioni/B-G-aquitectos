@@ -72,11 +72,11 @@ export default function Navbar() {
             }`}
           >
             <Image
-              src="/logo-bg.png"
+              src="/logo-bg1.png"
               alt="Estudio B+G Arquitectos"
-              width={2500}
-              height={709}
-              className="h-9 w-auto object-contain"
+              width={2172}
+              height={548}
+              className="h-9 w-auto object-contain drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)]"
               priority
               unoptimized
             />
@@ -87,17 +87,17 @@ export default function Navbar() {
             onClick={() => (panel ? close() : openMenu())}
             aria-label={panel ? "Cerrar" : "Abrir menú"}
             aria-expanded={!!panel}
-            className={`relative w-6 h-6 flex items-center justify-center text-[var(--text-primary)] transition-all duration-300 ease-out will-change-transform ${
+            className={`relative w-6 h-6 flex items-center justify-center text-[var(--text-primary)] drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)] transition-all duration-300 ease-out will-change-transform ${
               hidden ? "opacity-0 -translate-y-3" : "opacity-100 translate-y-0"
             }`}
           >
             <span
-              className={`absolute w-6 h-px bg-current transition-transform duration-250 ease-out ${
+              className={`absolute w-6 h-0.5 bg-current transition-transform duration-250 ease-out ${
                 panel ? "translate-y-0 rotate-45" : "-translate-y-[5px] rotate-0"
               }`}
             />
             <span
-              className={`absolute w-6 h-px bg-current transition-transform duration-250 ease-out ${
+              className={`absolute w-6 h-0.5 bg-current transition-transform duration-250 ease-out ${
                 panel ? "translate-y-0 -rotate-45" : "translate-y-[5px] rotate-0"
               }`}
             />
@@ -135,7 +135,7 @@ export default function Navbar() {
           <div className="px-10 pb-12 pt-8 border-t border-[var(--border)] mx-10 flex flex-col gap-2">
             <a
               href="mailto:estudioarq.bg@gmail.com"
-              className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+              className="text-base text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
             >
               estudioarq.bg@gmail.com
             </a>
@@ -143,7 +143,7 @@ export default function Navbar() {
               href="https://www.instagram.com/estudioarq.bg/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+              className="text-base text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
             >
               @estudioarq.bg
             </a>

@@ -18,7 +18,7 @@ export default function ContactPanel() {
           <h2 className="text-3xl sm:text-4xl font-light tracking-tight text-[var(--text-primary)]">
             Contacto
           </h2>
-          <p className="text-[var(--text-secondary)] text-sm leading-relaxed mt-4">
+          <p className="text-[var(--text-secondary)] text-base leading-relaxed mt-4">
             Trabajamos en La Plata y alrededores. Si tenés una idea, un terreno o un proyecto
             en mente, escribinos.
           </p>
@@ -34,7 +34,7 @@ export default function ContactPanel() {
             </p>
             <a
               href="mailto:estudioarq.bg@gmail.com"
-              className="text-[var(--text-primary)] text-sm hover:text-[var(--accent)] transition-colors"
+              className="text-[var(--text-primary)] text-base hover:text-[var(--accent)] transition-colors"
             >
               estudioarq.bg@gmail.com
             </a>
@@ -48,13 +48,13 @@ export default function ContactPanel() {
             <div className="flex flex-col gap-1">
               <a
                 href="tel:+5492214636769"
-                className="text-[var(--text-primary)] text-sm hover:text-[var(--accent)] transition-colors"
+                className="text-[var(--text-primary)] text-base hover:text-[var(--accent)] transition-colors"
               >
                 0221 15 463-6769 — José Luis Biagioni
               </a>
               <a
                 href="tel:+5492216205669"
-                className="text-[var(--text-primary)] text-sm hover:text-[var(--accent)] transition-colors"
+                className="text-[var(--text-primary)] text-base hover:text-[var(--accent)] transition-colors"
               >
                 0221 15 620-5669 — Kevin Gershanik
               </a>
@@ -66,7 +66,7 @@ export default function ContactPanel() {
               Estudio
               <MapPinIcon className="w-3 h-3" />
             </p>
-            <address className="not-italic text-[var(--text-primary)] text-sm leading-relaxed">
+            <address className="not-italic text-[var(--text-primary)] text-base leading-relaxed">
               Cno. Centenario 2744 e/ 504 y 505
               <br />
               Gonnet, La Plata, Buenos Aires
@@ -82,7 +82,7 @@ export default function ContactPanel() {
               href="https://www.instagram.com/estudioarq.bg/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[var(--text-primary)] text-sm hover:text-[var(--accent)] transition-colors"
+              className="text-[var(--text-primary)] text-base hover:text-[var(--accent)] transition-colors"
             >
               @estudioarq.bg
             </a>

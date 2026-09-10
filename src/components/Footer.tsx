@@ -13,15 +13,15 @@ export default function Footer() {
           <div className="flex flex-col gap-5">
             <Link href="/">
               <Image
-                src="/logo-bg.png"
+                src="/logo-bg1.png"
                 alt="Estudio B+G Arquitectos"
-                width={2500}
-                height={709}
+                width={2172}
+                height={548}
                 className="h-12 w-auto object-contain opacity-90 hover:opacity-100 transition-opacity"
                 unoptimized
               />
             </Link>
-            <p className="text-[var(--text-secondary)] text-sm leading-relaxed max-w-xs">
+            <p className="text-[var(--text-secondary)] text-base leading-relaxed max-w-xs">
               Arquitectura elegante, honesta y contemporánea, pensada para perdurar en el tiempo.
             </p>
             <a
@@ -47,12 +47,12 @@ export default function Footer() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-[var(--text-secondary)] text-sm hover:text-[var(--text-primary)] transition-colors"
+                className="text-[var(--text-secondary)] text-base hover:text-[var(--text-primary)] transition-colors"
               >
                 {link.label}
               </Link>
             ))}
-            <ConsultanosButton className="text-left text-[var(--text-secondary)] text-sm hover:text-[var(--text-primary)] transition-colors">
+            <ConsultanosButton className="text-left text-[var(--text-secondary)] text-base hover:text-[var(--text-primary)] transition-colors">
               Contacto
             </ConsultanosButton>
           </div>
@@ -64,23 +64,23 @@ export default function Footer() {
             </p>
             <a
               href="mailto:estudioarq.bg@gmail.com"
-              className="text-[var(--text-secondary)] text-sm hover:text-[var(--text-primary)] transition-colors"
+              className="text-[var(--text-secondary)] text-base hover:text-[var(--text-primary)] transition-colors"
             >
               estudioarq.bg@gmail.com
             </a>
             <a
               href="tel:+5492214636769"
-              className="text-[var(--text-secondary)] text-sm hover:text-[var(--text-primary)] transition-colors"
+              className="text-[var(--text-secondary)] text-base hover:text-[var(--text-primary)] transition-colors"
             >
               0221 15 463-6769
             </a>
             <a
               href="tel:+5492216205669"
-              className="text-[var(--text-secondary)] text-sm hover:text-[var(--text-primary)] transition-colors"
+              className="text-[var(--text-secondary)] text-base hover:text-[var(--text-primary)] transition-colors"
             >
               0221 15 620-5669
             </a>
-            <address className="not-italic text-[var(--text-secondary)] text-sm leading-relaxed">
+            <address className="not-italic text-[var(--text-secondary)] text-base leading-relaxed">
               Cno. Centenario 2744<br />
               e/ 504 y 505, Gonnet<br />
               La Plata, Buenos Aires

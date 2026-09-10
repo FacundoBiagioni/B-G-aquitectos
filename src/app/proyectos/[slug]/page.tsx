@@ -4,6 +4,7 @@ import Link from "next/link";
 import ProjectCard from "@/components/ProjectCard";
 import ProjectImage from "@/components/ProjectImage";
 import ConsultanosButton from "@/components/ConsultanosButton";
+import ScrollReveal from "@/components/ScrollReveal";
 import { getProjectBySlug, projects, typologyLabels, statusLabels } from "@/data/projects";
 
 interface Props {
@@ -21,6 +22,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: project.title,
     description: project.concept,
+    alternates: { canonical: `/proyectos/${project.slug}` },
+    openGraph: {
+      type: "article",
+      title: project.title,
+      description: project.concept,
+      url: `/proyectos/${project.slug}`,
+      images: [{ url: project.heroImage, alt: project.title }],
+    },
   };
 }
 
@@ -71,22 +80,22 @@ export default async function ProjectPage({ params }: Props) {
       {/* Content */}
       <div className="max-w-[1400px] mx-auto px-6 md:px-10">
         {/* Meta bar */}
-        <div className="border-b border-[var(--border)] py-6 flex flex-wrap gap-6 items-center justify-between">
+        <ScrollReveal className="border-b border-[var(--border)] py-6 flex flex-wrap gap-6 items-center justify-between">
           <div className="flex flex-wrap gap-6">
             <div>
               <p className="text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase mb-1">Año</p>
-              <p className="text-[var(--text-primary)] text-sm">{project.year}</p>
+              <p className="text-[var(--text-primary)] text-base">{project.year}</p>
             </div>
             <div>
               <p className="text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase mb-1">Tipología</p>
-              <p className="text-[var(--text-primary)] text-sm capitalize">
+              <p className="text-[var(--text-primary)] text-base capitalize">
                 {typologyLabels[project.typology]}
               </p>
             </div>
             {project.area && (
               <div>
                 <p className="text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase mb-1">Programa</p>
-                <p className="text-[var(--text-primary)] text-sm">{project.area}</p>
+                <p className="text-[var(--text-primary)] text-base">{project.area}</p>
               </div>
             )}
           </div>
@@ -95,47 +104,49 @@ export default async function ProjectPage({ params }: Props) {
           >
             {statusLabels[project.status]}
           </span>
-        </div>
+        </ScrollReveal>
 
         {/* Body */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 py-16">
           <div className="lg:col-span-2 flex flex-col gap-8">
-            <div>
+            <ScrollReveal>
               <p className="text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase mb-4">
                 Concepto
               </p>
               <p className="text-xl md:text-2xl font-light leading-snug text-[var(--text-primary)]">
                 {project.concept}
               </p>
-            </div>
-            <div>
+            </ScrollReveal>
+            <ScrollReveal delay={100}>
               <p className="text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase mb-4">
                 Descripción
               </p>
               <p className="text-[var(--text-secondary)] leading-relaxed text-base">
                 {project.description}
               </p>
-            </div>
+            </ScrollReveal>
 
             {/* Gallery */}
             {project.gallery.length > 0 && (
               <div className="mt-4 grid grid-cols-1 gap-px bg-[var(--border)]">
                 {project.gallery.map((src, i) => (
-                  <div key={i} className="relative aspect-video bg-[var(--bg-surface)]">
-                    <ProjectImage
-                      src={src}
-                      alt={`${project.title} — imagen ${i + 1}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
+                  <ScrollReveal key={i} delay={(i % 3) * 100} className="bg-[var(--bg-surface)]">
+                    <div className="relative aspect-video">
+                      <ProjectImage
+                        src={src}
+                        alt={`${project.title} — imagen ${i + 1}`}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  </ScrollReveal>
                 ))}
               </div>
             )}
           </div>
 
           {/* Sidebar */}
-          <div className="flex flex-col gap-8">
+          <ScrollReveal delay={150} className="flex flex-col gap-8">
             {/* Materialidad */}
             <div>
               <p className="text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase mb-4">
@@ -143,7 +154,7 @@ export default async function ProjectPage({ params }: Props) {
               </p>
               <ul className="flex flex-col gap-2">
                 {project.materials.map((m) => (
-                  <li key={m} className="flex items-start gap-3 text-[var(--text-secondary)] text-sm">
+                  <li key={m} className="flex items-start gap-3 text-[var(--text-secondary)] text-base">
                     <span className="mt-1.5 shrink-0 w-1 h-1 rounded-full bg-[var(--accent)]" />
                     {m}
                   </li>
@@ -159,7 +170,7 @@ export default async function ProjectPage({ params }: Props) {
                 </p>
                 <ul className="flex flex-col gap-2">
                   {project.highlights.map((h) => (
-                    <li key={h} className="flex items-start gap-3 text-[var(--text-secondary)] text-sm">
+                    <li key={h} className="flex items-start gap-3 text-[var(--text-secondary)] text-base">
                       <span className="mt-1.5 shrink-0 w-1 h-1 rounded-full bg-[var(--border)]" />
                       {h}
                     </li>
@@ -170,17 +181,17 @@ export default async function ProjectPage({ params }: Props) {
 
             {/* CTA */}
             <div className="border border-[var(--border)] p-6 flex flex-col gap-3">
-              <p className="text-[var(--text-primary)] text-sm font-light">
+              <p className="text-[var(--text-primary)] text-base font-light">
                 ¿Te interesa un proyecto similar?
               </p>
-              <p className="text-[var(--text-secondary)] text-xs leading-relaxed">
+              <p className="text-[var(--text-secondary)] text-sm leading-relaxed">
                 Contanos sobre tu idea y te respondemos a la brevedad.
               </p>
               <ConsultanosButton className="mt-2 px-5 py-2.5 bg-[var(--text-primary)] text-[var(--bg)] text-xs tracking-[0.1em] uppercase text-center hover:bg-[var(--accent)] transition-colors duration-300">
                 Consultanos
               </ConsultanosButton>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </div>
 
@@ -188,20 +199,24 @@ export default async function ProjectPage({ params }: Props) {
       {otherProjects.length > 0 && (
         <section className="border-t border-[var(--border)] py-16 bg-[var(--bg-surface)]">
           <div className="max-w-[1400px] mx-auto px-6 md:px-10">
-            <div className="flex items-center justify-between mb-8">
-              <p className="text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase">
-                También en {typologyLabels[project.typology]}
-              </p>
-              <Link
-                href="/proyectos"
-                className="text-[var(--text-secondary)] text-xs tracking-[0.15em] uppercase hover:text-[var(--text-primary)] transition-colors"
-              >
-                Ver todos →
-              </Link>
-            </div>
+            <ScrollReveal>
+              <div className="flex items-center justify-between mb-8">
+                <p className="text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase">
+                  También en {typologyLabels[project.typology]}
+                </p>
+                <Link
+                  href="/proyectos"
+                  className="text-[var(--text-secondary)] text-xs tracking-[0.15em] uppercase hover:text-[var(--text-primary)] transition-colors"
+                >
+                  Ver todos →
+                </Link>
+              </div>
+            </ScrollReveal>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 md:gap-x-8 gap-y-12">
-              {otherProjects.map((p) => (
-                <ProjectCard key={p.slug} project={p} />
+              {otherProjects.map((p, i) => (
+                <ScrollReveal key={p.slug} delay={i * 100}>
+                  <ProjectCard project={p} />
+                </ScrollReveal>
               ))}
             </div>
           </div>

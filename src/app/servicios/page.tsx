@@ -1,10 +1,20 @@
 import type { Metadata } from "next";
 import ConsultanosButton from "@/components/ConsultanosButton";
+import ScrollReveal from "@/components/ScrollReveal";
+
+const serviciosTitle = "Servicios";
+const serviciosDescription =
+  "Servicios de Estudio B+G: proyecto arquitectónico, dirección de obra y consultoría en diseño, materiales e inversión.";
 
 export const metadata: Metadata = {
-  title: "Servicios",
-  description:
-    "Servicios de Estudio B+G: proyecto arquitectónico, dirección de obra y consultoría en diseño, materiales e inversión.",
+  title: serviciosTitle,
+  description: serviciosDescription,
+  alternates: { canonical: "/servicios" },
+  openGraph: {
+    title: serviciosTitle,
+    description: serviciosDescription,
+    url: "/servicios",
+  },
 };
 
 const services = [
@@ -57,10 +67,12 @@ export default function ServiciosPage() {
     <>
       {/* Header */}
       <div className="pt-32 pb-16 max-w-[1400px] mx-auto px-6 md:px-10 border-b border-[var(--border)]">
-        <p className="text-[var(--accent)] text-[10px] tracking-[0.3em] uppercase mb-4">
-          Lo que hacemos
-        </p>
-        <h1 className="text-4xl md:text-6xl font-light tracking-tight max-w-2xl">Servicios</h1>
+        <ScrollReveal>
+          <p className="text-[var(--accent)] text-[10px] tracking-[0.3em] uppercase mb-4">
+            Lo que hacemos
+          </p>
+          <h1 className="text-4xl md:text-6xl font-light tracking-tight max-w-2xl">Servicios</h1>
+        </ScrollReveal>
       </div>
 
       {/* Services */}
@@ -72,7 +84,7 @@ export default function ServiciosPage() {
               i < services.length - 1 ? "border-b border-[var(--border)]" : ""
             }`}
           >
-            <div className="flex flex-col gap-4">
+            <ScrollReveal className="flex flex-col gap-4">
               <p className="text-[var(--text-muted)] text-[10px] tracking-[0.3em] uppercase">
                 {service.number}
               </p>
@@ -81,35 +93,35 @@ export default function ServiciosPage() {
                 {service.short}
               </p>
               <p className="text-[var(--text-secondary)] leading-relaxed">{service.description}</p>
-            </div>
-            <div>
+            </ScrollReveal>
+            <ScrollReveal delay={150}>
               <p className="text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase mb-6">
                 Incluye
               </p>
               <ul className="flex flex-col divide-y divide-[var(--border)]">
                 {service.includes.map((item) => (
-                  <li key={item} className="py-3 flex items-center gap-3 text-[var(--text-secondary)] text-sm">
+                  <li key={item} className="py-3 flex items-center gap-3 text-[var(--text-secondary)] text-base">
                     <span className="w-1 h-1 rounded-full bg-[var(--accent)] shrink-0" />
                     {item}
                   </li>
                 ))}
               </ul>
-            </div>
+            </ScrollReveal>
           </div>
         ))}
       </div>
 
       {/* CTA */}
       <section className="py-20 border-t border-[var(--border)] bg-[var(--bg-surface)]">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 text-center">
+        <ScrollReveal className="max-w-[1400px] mx-auto px-6 md:px-10 text-center">
           <h2 className="text-3xl font-light mb-4">¿En qué te podemos ayudar?</h2>
-          <p className="text-[var(--text-secondary)] mb-8 max-w-md mx-auto">
+          <p className="text-[var(--text-secondary)] text-base mb-8 max-w-md mx-auto">
             Contanos sobre tu proyecto y te contamos cómo podemos trabajar juntos.
           </p>
           <ConsultanosButton className="inline-flex px-8 py-3.5 bg-[var(--text-primary)] text-[var(--bg)] text-xs tracking-[0.15em] uppercase font-medium hover:bg-[var(--accent)] transition-colors duration-300">
             Consultanos
           </ConsultanosButton>
-        </div>
+        </ScrollReveal>
       </section>
     </>
   );

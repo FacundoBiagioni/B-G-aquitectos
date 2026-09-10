@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PanelProvider } from "@/components/PanelProvider";
 import ContactPanel from "@/components/ContactPanel";
+import { SITE_URL, homeCover } from "@/data/site";
 
 const geist = Geist({
   variable: "--font-geist-sans",
@@ -12,13 +13,17 @@ const geist = Geist({
   weight: ["300", "400", "500", "600"],
 });
 
+const defaultTitle = "Estudio B+G Arquitectura | La Plata";
+const defaultDescription =
+  "Estudio de arquitectura en La Plata. Edificios en altura, casas en barrios privados y proyectos comerciales. José Luis Biagioni + Kevin Gershanik.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "Estudio B+G Arquitectura | La Plata",
+    default: defaultTitle,
     template: "%s | Estudio B+G Arquitectura",
   },
-  description:
-    "Estudio de arquitectura en La Plata. Edificios en altura, casas en barrios privados y proyectos comerciales. José Luis Biagioni + Kevin Gershanik.",
+  description: defaultDescription,
   keywords: [
     "estudio de arquitectura La Plata",
     "arquitectos La Plata",
@@ -28,14 +33,23 @@ export const metadata: Metadata = {
     "Gonnet arquitectura",
   ],
   authors: [{ name: "José Luis Biagioni" }, { name: "Kevin Gershanik" }],
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     type: "website",
     locale: "es_AR",
-    url: "https://estudioarqbg.com",
+    url: SITE_URL,
     siteName: "Estudio B+G Arquitectura",
-    title: "Estudio B+G Arquitectura | La Plata",
-    description:
-      "Estudio de arquitectura en La Plata. Edificios, casas en barrios privados y proyectos comerciales.",
+    title: defaultTitle,
+    description: defaultDescription,
+    images: [{ url: homeCover.src, width: 1600, height: 900, alt: homeCover.alt }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: defaultTitle,
+    description: defaultDescription,
+    images: [homeCover.src],
   },
   robots: {
     index: true,

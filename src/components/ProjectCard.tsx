@@ -28,7 +28,7 @@ export default function ProjectCard({ project, priority = false }: ProjectCardPr
             {project.title}
           </h3>
           {project.subtitle && (
-            <p className="text-[var(--text-secondary)] text-sm font-light">{project.subtitle}</p>
+            <p className="text-[var(--text-secondary)] text-base font-light">{project.subtitle}</p>
           )}
           <p className="text-[var(--text-muted)] text-[10px] tracking-[0.15em] uppercase mt-1.5">
             {typologyLabels[project.typology]} — {statusLabels[project.status]}
