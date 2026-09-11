@@ -122,7 +122,7 @@ export default function NosotrosPage() {
       <Link
         href="/"
         aria-label="Ir al inicio"
-        className="relative h-[70vh] min-h-[500px] overflow-hidden bg-[var(--bg-surface)] block"
+        className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] min-h-[320px] sm:min-h-[400px] md:min-h-[500px] overflow-hidden bg-[var(--bg-surface)] block"
       >
         <ProjectImage
           src="/team/fachada b+g.png"
