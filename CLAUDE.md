@@ -17,8 +17,14 @@ solo agrega contexto de implementación.
 - Next.js 16.3.4 (App Router, Turbopack), React 19.2, TypeScript, Tailwind CSS v4, ESLint 9.
 - Sin base de datos ni backend propio — todo el contenido de proyectos vive hardcodeado en
   `src/data/projects.ts`. Decisión explícita del usuario (2026-09-10): no sumar backend ni para
-  el formulario (Web3Forms, cliente-only) ni para un futuro mapa de ubicación (iframe de Google
-  Maps o Mapbox/Leaflet con key pública, también cliente-only).
+  el formulario (Web3Forms, cliente-only) ni para el mapa de ubicación (Leaflet, cliente-only,
+  ver `LocationMap.tsx` abajo).
+- `leaflet` (+ `@types/leaflet`) — mapa de ubicación en Nosotros. Tiles: OpenStreetMap estándar
+  (`tile.openstreetmap.org`, sin API key ni cuenta) con un filtro CSS (`.map-dark` en
+  `globals.css`) para oscurecerlos y que combinen con el tema del sitio — CARTO, que antes
+  ofrecía tiles oscuros gratis sin key, ahora la exige, así que se optó por este approach en vez
+  de pedirle al usuario que gestione una cuenta/API key. Si en algún momento se consigue una key
+  de CARTO o Mapbox, se puede volver a un tile server nativamente oscuro y sacar el filtro.
 - `npm run dev` / `npm run build` / `npm run lint` / `npm run start` (server de producción real,
   útil para probar headers/CSP que `next dev` no aplica igual).
 - `node scripts/optimize-images.mjs` — recomprime/redimensiona en el lugar todo lo que haya en
@@ -51,10 +57,13 @@ src/components/
   Navbar.tsx           Fixed header, siempre transparente (sin fondo/borde en ningún estado),
                        se oculta al bajar scroll y reaparece al subir. El logo se demora un poco
                        más que el botón de menú al ocultarse (transition-delay). Logo:
-                       `/logo-bg1.png` (versión sin "ARQUITECTOS", más minimalista) con un
-                       drop-shadow sutil para que resalte un poco sobre fondos claros; el ícono
-                       de hamburguesa/X usa el mismo tratamiento (líneas h-0.5, no h-px).
-  Footer.tsx           Usa el mismo `/logo-bg1.png`.
+                       `/logo-bg1.png` (isotipo, elegido por el usuario 2026-09-10 en
+                       reemplazo del wordmark minimalista que tenía antes ese mismo nombre —
+                       ver `public/logo-bg2.png` en la nota de abajo) con un drop-shadow sutil
+                       para que resalte un poco sobre fondos claros; el ícono de hamburguesa/X
+                       usa el mismo tratamiento (líneas h-0.5, no h-px).
+  Footer.tsx           Usa `/logo-bg.png` (wordmark completo con "ARQUITECTOS" — el logo
+                       original del estudio, distinto del isotipo del Navbar).
   ProjectCard.tsx      Card de proyecto (usada en home, listado y "también en...")
   ProjectImage.tsx     Wrapper de next/image que hace fallback a /placeholder.svg en onError
   ProjectsCarousel.tsx Carrusel horizontal de TODOS los proyectos en Home: autoplay continuo
@@ -65,13 +74,35 @@ src/components/
                        librería de animación). Usado en el contenido de todas las páginas menos
                        en los paneles deslizables (Navbar/ContactPanel) — eso fue pedido
                        explícito: "el menú desplegable claramente ahí no van los movimientos".
+                       Prop `immediate`: anima al montar en vez de esperar el IntersectionObserver
+                       — usarlo para contenido ya visible sin scroll (ej. el hero de Home), porque
+                       el `rootMargin` recorta el 10% inferior de la pantalla y un elemento pegado
+                       abajo del todo (como los botones del hero) puede no disparar nunca sin él.
+  BackToTop.tsx        Botón fijo (flecha ↑) que sube al principio de la página con scroll suave.
+                       Aparece/desaparece según el % de recorrido de scroll de la página, no un
+                       valor fijo en px — con dos umbrales distintos (aparece al 30%, desaparece
+                       al 50%) para que no titile justo en un solo punto. Montado una vez en
+                       layout.tsx, así que aplica a todas las páginas.
+  LocationMap.tsx      Mapa de Leaflet (Nosotros) con la ubicación del estudio — ver Stack arriba
+                       para el detalle de tiles/CSP. Import dinámico de `leaflet` dentro de un
+                       useEffect (no en el top del módulo) porque la librería toca `window` en el
+                       import y rompería el SSR/build si no. Marcador y popup con divIcon/HTML
+                       propios (nada de los íconos PNG default de Leaflet). `scrollWheelZoom`
+                       arranca deshabilitado y se habilita recién con foco/click, para no atrapar
+                       el scroll de la página al pasar el mouse por encima.
   JsonLd.tsx           `<script type="application/ld+json">` genérico para datos estructurados.
   PanelProvider.tsx    Contexto compartido (`usePanel()`) que controla cuál de los dos paneles
                        deslizables de la derecha está abierto: "menu" | "contact" | null.
   RightPanel.tsx       Shell genérico del panel deslizable (backdrop + panel w-full sm:w-[420px],
                        misma transición para ambos). Lo usan tanto el menú de Navbar como
-                       ContactPanel — así quedan garantizadas las mismas proporciones.
-  ContactPanel.tsx     Panel de contacto (formulario + datos), montado una vez en layout.tsx.
+                       ContactPanel — así quedan garantizadas las mismas proporciones. Prop
+                       `scrollable` (default true): ContactPanel la pasa en false porque, tras
+                       sacarle los datos de contacto (ver abajo), ya no necesita scrollear.
+  ContactPanel.tsx     Panel de contacto — encabezado + `ContactForm` únicamente. Antes tenía
+                       también email/teléfono/dirección/Instagram, pero se sacó (2026-09-10) por
+                       ser contenido repetido con el Footer y con lo que se sumó a Nosotros
+                       (ver `LocationMap.tsx`); los íconos que usaba esa sección siguen en
+                       `icons.tsx` sin usar, por si se reutilizan más adelante.
   ContactForm.tsx      Envía el formulario a Web3Forms (ver sección de abajo).
   ConsultanosButton.tsx   Botón que llama a `openContact()` del contexto — reemplaza cualquier
                        `<Link href="/contacto">` en Home, Servicios, Nosotros, ficha de proyecto
@@ -144,7 +175,8 @@ merece por defecto):
   `style-src` con `'unsafe-inline'` (Next/RSC inyecta scripts inline para la hidratación —
   bloquearlos requeriría nonces + forzar render dinámico en todo el sitio, no vale la pena para
   un sitio 100% estático); `'unsafe-eval'` solo en dev (lo necesita React para los stack traces).
-  `connect-src`/`form-action` incluyen `https://api.web3forms.com` explícitamente.
+  `connect-src`/`form-action` incluyen `https://api.web3forms.com` explícitamente; `img-src`
+  incluye `https://tile.openstreetmap.org` para los tiles del mapa de Nosotros.
 - `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy:
   strict-origin-when-cross-origin`, `Permissions-Policy` (camera/microphone/geolocation
   deshabilitados — el sitio no los usa).
@@ -200,9 +232,16 @@ algo "ya está", verificar:
 7. ~~Sin JSON-LD~~ — resuelto (LocalBusiness + Person).
 8. **Videos de obra sin incorporar** (el informe menciona `.mp4` de la carpeta de E25 como
    candidato para el hero).
-9. ~~Logo vectorial~~ — resuelto, ya está en uso en Navbar/Footer (ahora `/logo-bg1.png`).
-10. **Sin mapa de ubicación.** El usuario quiere sumarlo a futuro (2026-09-10) — sin backend,
-    con un iframe de Google Maps o Mapbox/Leaflet client-side.
+9. ~~Logo vectorial~~ — resuelto, en uso en Navbar (`/logo-bg1.png`) y Footer (`/logo-bg.png`).
+10. ~~Sin mapa de ubicación~~ — resuelto (2026-09-10), `LocationMap.tsx` en Nosotros. Coordenadas
+    confirmadas por el usuario vía Plus Code de Google Maps (no geocodificadas a ciegas — la
+    geocodificación automática por dirección no daba precisión de altura/puerta).
+11. **`public/logo-bg2.png` no se usa en ningún componente — a propósito, no borrar.** Es el
+    wordmark minimalista que antes vivía en `logo-bg1.png`; el usuario lo reemplazó por un
+    isotipo (2026-09-10) pero pidió explícitamente conservar el wordmark por si el cliente
+    termina prefiriendo esa opción. Tres logos conviven hoy: `logo-bg.png` (wordmark completo
+    "ARQUITECTOS", Footer), `logo-bg1.png` (isotipo, Navbar), `logo-bg2.png` (wordmark
+    minimalista, sin usar, en reserva).
 
 ## Notas de sesión
 
