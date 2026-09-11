@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type CSSProperties } from "react";
 import ScrollReveal from "./ScrollReveal";
 import ProjectImage from "./ProjectImage";
 import { ExpandIcon } from "./icons";
@@ -12,7 +12,11 @@ interface ProjectGalleryProps {
   title: string;
 }
 
-const ROW_HEIGHT_CLASSES = "h-[320px] sm:h-[420px] lg:h-[520px]";
+// Only a fixed height at sm+ — below that, rows are flex-col (stacked), and
+// a fixed height there would force every stacked image to share it via
+// flex-grow, squishing tall portrait photos down to a sliver. Below sm each
+// image sizes itself from its own aspect-ratio instead (see --ar below).
+const ROW_HEIGHT_CLASSES = "sm:h-[420px] lg:h-[520px]";
 
 interface GalleryTileButtonProps {
   src: string;
@@ -86,12 +90,8 @@ export default function ProjectGallery({ images, title }: ProjectGalleryProps) {
                 <ScrollReveal
                   key={image.src}
                   delay={((rowIndex + i) % 4) * 80}
-                  className="min-w-0"
-                  style={
-                    rowImages.length > 1
-                      ? { flexGrow: image.width / image.height, flexBasis: 0 }
-                      : { flexGrow: 1 }
-                  }
+                  className="min-w-0 w-full aspect-(--ar) sm:aspect-auto sm:basis-0 sm:grow-(--ar)"
+                  style={{ "--ar": image.width / image.height } as CSSProperties}
                 >
                   <GalleryTileButton
                     src={image.src}
@@ -118,7 +118,7 @@ export default function ProjectGallery({ images, title }: ProjectGalleryProps) {
             }}
             aria-label="Cerrar"
             autoFocus
-            className="absolute top-6 right-6 flex h-11 w-11 items-center justify-center border border-white/20 text-white/80 transition-colors duration-200 hover:border-white/50 hover:text-white"
+            className="absolute top-6 right-6 z-10 flex h-11 w-11 items-center justify-center border border-white/20 bg-black/40 text-white/80 transition-colors duration-200 hover:border-white/50 hover:text-white"
           >
             ✕
           </button>
@@ -131,7 +131,7 @@ export default function ProjectGallery({ images, title }: ProjectGalleryProps) {
                 prev();
               }}
               aria-label="Imagen anterior"
-              className="absolute left-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-white/20 text-white/80 transition-colors duration-200 hover:border-white/50 hover:text-white sm:left-6"
+              className="absolute left-4 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-white/20 bg-black/40 text-white/80 transition-colors duration-200 hover:border-white/50 hover:text-white sm:left-6"
             >
               ←
             </button>
@@ -159,14 +159,14 @@ export default function ProjectGallery({ images, title }: ProjectGalleryProps) {
                 next();
               }}
               aria-label="Imagen siguiente"
-              className="absolute right-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-white/20 text-white/80 transition-colors duration-200 hover:border-white/50 hover:text-white sm:right-6"
+              className="absolute right-4 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-white/20 bg-black/40 text-white/80 transition-colors duration-200 hover:border-white/50 hover:text-white sm:right-6"
             >
               →
             </button>
           )}
 
           {images.length > 1 && (
-            <p className="absolute bottom-6 left-1/2 -translate-x-1/2 text-xs tracking-[0.15em] text-white/50">
+            <p className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-xs tracking-[0.15em] text-white/50">
               {openIndex + 1} / {images.length}
             </p>
           )}
