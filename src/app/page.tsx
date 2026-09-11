@@ -48,12 +48,12 @@ export default function HomePage() {
 
         <div className="relative z-10 max-w-[1400px] mx-auto px-6 md:px-10 pb-20 w-full">
           <div className="max-w-3xl">
-            <ScrollReveal delay={0} y={16}>
+            <ScrollReveal immediate delay={0} y={16}>
               <p className="text-[var(--accent)] text-xs tracking-[0.3em] uppercase mb-6">
                 Estudio B+G — La Plata, Argentina
               </p>
             </ScrollReveal>
-            <ScrollReveal delay={120}>
+            <ScrollReveal immediate delay={120}>
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light leading-[1.05] tracking-tight text-[var(--text-primary)] mb-8">
                 Arquitectura
                 <br />
@@ -62,13 +62,13 @@ export default function HomePage() {
                 y contemporánea.
               </h1>
             </ScrollReveal>
-            <ScrollReveal delay={240}>
+            <ScrollReveal immediate delay={240}>
               <p className="text-[var(--text-secondary)] text-base md:text-lg font-light leading-relaxed max-w-xl mb-10">
                 Diseñamos edificios, casas y proyectos únicos en La Plata.
                 Materialidad, calidad espacial y luz natural en equilibrio.
               </p>
             </ScrollReveal>
-            <ScrollReveal delay={360}>
+            <ScrollReveal immediate delay={360}>
               <div className="flex flex-wrap gap-4">
                 <Link
                   href="/proyectos"
