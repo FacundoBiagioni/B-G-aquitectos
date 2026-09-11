@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PanelProvider } from "@/components/PanelProvider";
 import ContactPanel from "@/components/ContactPanel";
+import BackToTop from "@/components/BackToTop";
 import { SITE_URL, homeCover } from "@/data/site";
 
 const geist = Geist({
@@ -70,6 +71,7 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <Footer />
           <ContactPanel />
+          <BackToTop />
         </PanelProvider>
       </body>
     </html>
