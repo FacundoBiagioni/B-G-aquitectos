@@ -1,6 +1,12 @@
 export type ProjectTypology = "edificio" | "casa" | "comercial";
 export type ProjectStatus = "en-desarrollo" | "entregado" | "en-obra";
 
+export interface GalleryImage {
+  src: string;
+  width: number;
+  height: number;
+}
+
 export interface Project {
   slug: string;
   title: string;
@@ -13,7 +19,7 @@ export interface Project {
   description: string;
   materials: string[];
   heroImage: string;
-  gallery: string[];
+  gallery: GalleryImage[];
   featured: boolean;
   highlights?: string[];
   area?: string;
@@ -36,9 +42,14 @@ export const projects: Project[] = [
     materials: ["Hormigón visto", "Madera natural", "Vidrio laminado", "Carpinterías de aluminio negro"],
     heroImage: "/projects/hiarq-e25/hero.jpg",
     gallery: [
-      "/projects/hiarq-e25/render-01.jpg",
-      "/projects/hiarq-e25/render-02.jpg",
-      "/projects/hiarq-e25/render-03.jpg",
+      { src: "/projects/hiarq-e25/hero1.jpg", width: 1254, height: 1254 },
+      { src: "/projects/hiarq-e25/hero2.jpg", width: 1448, height: 1086 },
+      { src: "/projects/hiarq-e25/hero3.jpg", width: 1308, height: 1202 },
+      { src: "/projects/hiarq-e25/hero5.jpg", width: 1448, height: 1086 },
+      { src: "/projects/hiarq-e25/hero6.jpg", width: 1536, height: 1024 },
+      { src: "/projects/hiarq-e25/hero7.jpg", width: 1399, height: 1124 },
+      { src: "/projects/hiarq-e25/hero8.jpg", width: 1672, height: 941 },
+      { src: "/projects/hiarq-e25/interior.jpg", width: 1448, height: 1086 },
     ],
     featured: true,
     area: "Edificio de 64 unidades",
@@ -67,9 +78,13 @@ export const projects: Project[] = [
     materials: ["Hormigón visto", "Madera exterior e interior", "Vegetación integrada", "Vidrio"],
     heroImage: "/projects/benoit-51/hero.jpg",
     gallery: [
-      "/projects/benoit-51/render-01.jpg",
-      "/projects/benoit-51/render-02.jpg",
-      "/projects/benoit-51/render-03.jpg",
+      { src: "/projects/benoit-51/hero1.jpg", width: 1025, height: 1534 },
+      { src: "/projects/benoit-51/hero2.jpg", width: 1536, height: 1024 },
+      { src: "/projects/benoit-51/hero3.jpg", width: 1849, height: 851 },
+      { src: "/projects/benoit-51/hero4.jpg", width: 1536, height: 1024 },
+      { src: "/projects/benoit-51/hero5.jpg", width: 1536, height: 1024 },
+      { src: "/projects/benoit-51/hero6.jpg", width: 1173, height: 1341 },
+      { src: "/projects/benoit-51/hero7.jpg", width: 1536, height: 1024 },
     ],
     featured: true,
     area: "2.330 m²",
@@ -96,8 +111,19 @@ export const projects: Project[] = [
     materials: ["Hormigón a la vista", "Aluminio negro", "Vidrio laminado", "Porcelanato ILVA/Vite"],
     heroImage: "/projects/edificio-e14/hero.jpg",
     gallery: [
-      "/projects/edificio-e14/render-01.jpg",
-      "/projects/edificio-e14/foto-01.jpg",
+      { src: "/projects/edificio-e14/hero1.jpg", width: 2200, height: 3929 },
+      { src: "/projects/edificio-e14/hero3.jpg", width: 2200, height: 3929 },
+      { src: "/projects/edificio-e14/20230523_174709.jpg", width: 2200, height: 1239 },
+      {
+        src: "/projects/edificio-e14/WhatsApp Image 2025-08-06 at 12.03.00 PM (7).jpeg",
+        width: 960,
+        height: 1280,
+      },
+      {
+        src: "/projects/edificio-e14/WhatsApp Image 2025-08-06 at 12.03.00 PM (8).jpeg",
+        width: 960,
+        height: 1280,
+      },
     ],
     featured: false,
     area: "PB + 9 pisos, 24 unidades",
@@ -117,8 +143,12 @@ export const projects: Project[] = [
     materials: ["Hormigón visto", "Madera", "Vidrio", "Metales oscuros"],
     heroImage: "/projects/dx-castells-village/hero.jpg",
     gallery: [
-      "/projects/dx-castells-village/render-01.jpg",
-      "/projects/dx-castells-village/foto-01.jpg",
+      { src: "/projects/dx-castells-village/hero2.jpg", width: 2200, height: 1238 },
+      { src: "/projects/dx-castells-village/6.jpg", width: 2200, height: 1238 },
+      { src: "/projects/dx-castells-village/10.jpg", width: 2200, height: 1238 },
+      { src: "/projects/dx-castells-village/16.jpg", width: 2200, height: 1238 },
+      { src: "/projects/dx-castells-village/17.jpg", width: 2200, height: 1238 },
+      { src: "/projects/dx-castells-village/21.jpg", width: 2200, height: 1238 },
     ],
     featured: true,
     folder: "04-DX Castells Village Cdkot",
@@ -135,7 +165,19 @@ export const projects: Project[] = [
       "Casa familiar en country privado con fuerte relación interior-exterior. El proyecto prioriza la luz natural y la conectividad entre los distintos ambientes.",
     materials: ["Hormigón visto", "Madera", "Vidrio"],
     heroImage: "/projects/casa-jorge-nora/hero.jpg",
-    gallery: ["/projects/casa-jorge-nora/foto-01.jpg"],
+    gallery: [
+      { src: "/projects/casa-jorge-nora/hero1.jpg", width: 2200, height: 1463 },
+      { src: "/projects/casa-jorge-nora/hero22.jpg", width: 2200, height: 1238 },
+      { src: "/projects/casa-jorge-nora/hero3.jpg", width: 2200, height: 1463 },
+      { src: "/projects/casa-jorge-nora/20190607_134933.jpg", width: 2200, height: 1238 },
+      { src: "/projects/casa-jorge-nora/20191018_170558.jpg", width: 2200, height: 1238 },
+      { src: "/projects/casa-jorge-nora/20191018_170606.jpg", width: 2200, height: 1238 },
+      { src: "/projects/casa-jorge-nora/20191101_192843.jpg", width: 2200, height: 1238 },
+      { src: "/projects/casa-jorge-nora/20191101_193028.jpg", width: 2200, height: 1182 },
+      { src: "/projects/casa-jorge-nora/20191101_193219.jpg", width: 2200, height: 1238 },
+      { src: "/projects/casa-jorge-nora/DSC_0076.jpg", width: 2200, height: 1463 },
+      { src: "/projects/casa-jorge-nora/DSC_0149.jpg", width: 2200, height: 3308 },
+    ],
     featured: false,
     folder: "05-Casa jorge y nora en disco",
   },
@@ -153,7 +195,17 @@ export const projects: Project[] = [
       "Vivienda unifamiliar en Barrio Miralagos con vistas privilegiadas. El estudio desarrolló dos versiones de anteproyecto para explorar distintas relaciones entre el programa doméstico y el lago.",
     materials: ["Hormigón visto", "Madera natural", "Vidrio", "Metales oscuros"],
     heroImage: "/projects/casa-miralagos/hero.jpg",
-    gallery: ["/projects/casa-miralagos/render-01.jpg", "/projects/casa-miralagos/foto-01.jpg"],
+    gallery: [
+      { src: "/projects/casa-miralagos/1_24 - Photo.jpg", width: 1920, height: 1080 },
+      { src: "/projects/casa-miralagos/1_33 - Photo.jpg", width: 1920, height: 1080 },
+      { src: "/projects/casa-miralagos/1_42 - Photo.jpg", width: 1920, height: 1080 },
+      { src: "/projects/casa-miralagos/1_47 - Photo.jpg", width: 1920, height: 1080 },
+      { src: "/projects/casa-miralagos/1_54 - Photo.jpg", width: 1920, height: 1080 },
+      { src: "/projects/casa-miralagos/1_55 - Photo.jpg", width: 1920, height: 1080 },
+      { src: "/projects/casa-miralagos/1_57 - Photo.jpg", width: 1920, height: 1080 },
+      { src: "/projects/casa-miralagos/1_65 - Foto.jpg", width: 1920, height: 1080 },
+      { src: "/projects/casa-miralagos/1_84 - Foto.jpg", width: 1920, height: 1080 },
+    ],
     featured: false,
     folder: "06-Casa Miralagos - Vanesa y Gustavo",
   },
@@ -170,7 +222,7 @@ export const projects: Project[] = [
       "Proyecto de refuncionalización comercial para la empresa CDKOT. El diseño reorganiza la planta existente con un criterio de organización espacial de largo plazo y propone una nueva fachada contemporánea.",
     materials: ["Acero", "Vidrio", "Materiales de construcción en seco"],
     heroImage: "/projects/cdkot/hero.jpg",
-    gallery: ["/projects/cdkot/render-01.jpg", "/projects/cdkot/foto-01.jpg"],
+    gallery: [],
     featured: false,
     folder: "07-CDKOT",
   },
@@ -187,7 +239,22 @@ export const projects: Project[] = [
       "Casa en Campos de Roca con anteproyecto completo. El programa residencial se desarrolla integrando materiales nobles como el hormigón a la vista y la madera con el paisajismo del barrio.",
     materials: ["Hormigón visto", "Madera", "Vidrio"],
     heroImage: "/projects/casa-campos-de-roca/hero.jpg",
-    gallery: ["/projects/casa-campos-de-roca/render-01.jpg"],
+    gallery: [
+      { src: "/projects/casa-campos-de-roca/3.jpg", width: 2200, height: 1238 },
+      { src: "/projects/casa-campos-de-roca/14.jpg", width: 2200, height: 1238 },
+      { src: "/projects/casa-campos-de-roca/17.jpg", width: 2200, height: 1238 },
+      { src: "/projects/casa-campos-de-roca/23.jpg", width: 2200, height: 1238 },
+      {
+        src: "/projects/casa-campos-de-roca/WhatsApp Image 2026-05-18 at 9.52.08 AM.jpeg",
+        width: 1600,
+        height: 1200,
+      },
+      {
+        src: "/projects/casa-campos-de-roca/WhatsApp Image 2026-05-18 at 9.52.09 AM (2).jpeg",
+        width: 1600,
+        height: 1200,
+      },
+    ],
     featured: false,
     folder: "08-Casa Campos de Roca Lote 381",
   },
@@ -205,7 +272,11 @@ export const projects: Project[] = [
       "Vivienda con documentación técnica integral: 11 láminas de planos completos más instalaciones eléctricas, sanitarias y de gas. El proyecto se desarrolla respetando el reglamento de construcción de Fincas de Duggan.",
     materials: ["Hormigón visto", "Madera", "Vidrio", "Metales oscuros"],
     heroImage: "/projects/fincas-de-duggan-15b/hero.jpg",
-    gallery: ["/projects/fincas-de-duggan-15b/render-01.jpg"],
+    gallery: [
+      { src: "/projects/fincas-de-duggan-15b/2.jpg", width: 2200, height: 1238 },
+      { src: "/projects/fincas-de-duggan-15b/3.jpg", width: 2200, height: 1238 },
+      { src: "/projects/fincas-de-duggan-15b/111.jpg", width: 2200, height: 1238 },
+    ],
     featured: false,
     folder: "09- Fincas de Duggan 15b - Natalia y Ariel",
   },
@@ -221,7 +292,14 @@ export const projects: Project[] = [
       "Vivienda unifamiliar actualmente en desarrollo. La planta baja fue proyectada en 2025 y la planta alta se está diseñando en 2026.",
     materials: ["Hormigón visto", "Madera", "Vidrio"],
     heroImage: "/projects/casa-juze/hero.jpg",
-    gallery: [],
+    gallery: [
+      { src: "/projects/casa-juze/herqqqo.jpg", width: 2200, height: 1238 },
+      { src: "/projects/casa-juze/2B.jpg", width: 2200, height: 1238 },
+      { src: "/projects/casa-juze/6B.jpg", width: 2200, height: 1238 },
+      { src: "/projects/casa-juze/pp_16 - Photo.jpg", width: 1920, height: 1080 },
+      { src: "/projects/casa-juze/Todo Blanco  (14).jpg", width: 1920, height: 1080 },
+      { src: "/projects/casa-juze/vista tracera Juze.jpg", width: 1536, height: 1024 },
+    ],
     featured: false,
     folder: "10- Casa JUZE",
   },
@@ -239,7 +317,13 @@ export const projects: Project[] = [
       "Vivienda en Barrio Pueblo con renders de alta calidad presentados en 2025. El proyecto explora la contemporaneidad del lenguaje B+G en un lote de barrio privado.",
     materials: ["Hormigón visto", "Madera natural", "Vidrio", "Metales negros"],
     heroImage: "/projects/casa-l19-pueblo/hero.jpg",
-    gallery: ["/projects/casa-l19-pueblo/render-01.jpg", "/projects/casa-l19-pueblo/render-02.jpg"],
+    gallery: [
+      { src: "/projects/casa-l19-pueblo/1 (3).jpg", width: 2200, height: 1238 },
+      { src: "/projects/casa-l19-pueblo/1 (6).jpg", width: 2200, height: 1238 },
+      { src: "/projects/casa-l19-pueblo/2 (5).jpg", width: 1920, height: 1080 },
+      { src: "/projects/casa-l19-pueblo/2 (6).jpg", width: 1920, height: 1080 },
+      { src: "/projects/casa-l19-pueblo/2 (10).jpg", width: 1920, height: 1080 },
+    ],
     featured: false,
     folder: "11-Casa Lorena y Javier L19 Pueblo",
   },
@@ -256,7 +340,11 @@ export const projects: Project[] = [
       "Casa en Las Huertas con anteproyecto completo documentado en PDF. El proyecto integra el vocabulario material característico del estudio.",
     materials: ["Hormigón visto", "Madera", "Vidrio"],
     heroImage: "/projects/casa-4f-las-huertas/hero.jpg",
-    gallery: [],
+    gallery: [
+      { src: "/projects/casa-4f-las-huertas/Romantica1.png", width: 1536, height: 1024 },
+      { src: "/projects/casa-4f-las-huertas/miravo2.png", width: 1536, height: 1024 },
+      { src: "/projects/casa-4f-las-huertas/jjjjjjjjj.png", width: 1536, height: 1024 },
+    ],
     featured: false,
     folder: "12-Casa 4F las Huertas",
   },
@@ -272,7 +360,16 @@ export const projects: Project[] = [
       "Vivienda unifamiliar en Gonnet entregada y documentada fotográficamente. El proyecto combina renders de presentación con fotografías del resultado final de obra.",
     materials: ["Hormigón visto", "Madera", "Vidrio"],
     heroImage: "/projects/andrea-jalo/hero.jpg",
-    gallery: ["/projects/andrea-jalo/foto-01.jpg", "/projects/andrea-jalo/foto-02.jpg"],
+    gallery: [
+      { src: "/projects/andrea-jalo/2.jpg", width: 2200, height: 1238 },
+      { src: "/projects/andrea-jalo/4.jpg", width: 2200, height: 1238 },
+      { src: "/projects/andrea-jalo/14.jpg", width: 2200, height: 1238 },
+      { src: "/projects/andrea-jalo/15.jpg", width: 2200, height: 1238 },
+      { src: "/projects/andrea-jalo/22.jpg", width: 2200, height: 1238 },
+      { src: "/projects/andrea-jalo/23.jpg", width: 2200, height: 1210 },
+      { src: "/projects/andrea-jalo/26.jpg", width: 2200, height: 1238 },
+      { src: "/projects/andrea-jalo/28.jpg", width: 2200, height: 1389 },
+    ],
     featured: false,
     folder: "13-Andrea Jalo gonnet",
   },
@@ -295,7 +392,7 @@ export const projects: Project[] = [
       "Montaje en seco reciclable",
     ],
     heroImage: "/projects/labca/hero.jpg",
-    gallery: ["/projects/labca/render-01.jpg", "/projects/labca/foto-01.jpg"],
+    gallery: [{ src: "/projects/labca/ededede.jpg", width: 720, height: 1280 }],
     featured: false,
     highlights: [
       "Fachada inspirada en la figura del círculo (microbiología)",
@@ -317,7 +414,14 @@ export const projects: Project[] = [
       "Vivienda en Fincas de Duggan lote 305, con anteproyecto completo y seguimiento de obra documentado fotográficamente.",
     materials: ["Hormigón visto", "Madera", "Vidrio"],
     heroImage: "/projects/duggan2-305/hero.jpg",
-    gallery: ["/projects/duggan2-305/render-01.jpg"],
+    gallery: [
+      { src: "/projects/duggan2-305/2.jpg", width: 2200, height: 1238 },
+      { src: "/projects/duggan2-305/20211119_155052.jpg", width: 2200, height: 1650 },
+      { src: "/projects/duggan2-305/20211119_155128.jpg", width: 2200, height: 1650 },
+      { src: "/projects/duggan2-305/20211222_145232.jpg", width: 2200, height: 1650 },
+      { src: "/projects/duggan2-305/20211222_145305.jpg", width: 2200, height: 1650 },
+      { src: "/projects/duggan2-305/20220218_152427.jpg", width: 2200, height: 2933 },
+    ],
     featured: false,
     folder: "15- Duggan2 - 305 - Amparo y Gastón",
   },
