@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import ScrollReveal from "./ScrollReveal";
 import ProjectImage from "./ProjectImage";
 import { ExpandIcon } from "./icons";
-import { getGalleryTiles } from "@/lib/galleryLayout";
+import { groupIntoRows } from "@/lib/galleryLayout";
 import type { GalleryImage } from "@/data/projects";
 
 interface ProjectGalleryProps {
@@ -12,9 +12,38 @@ interface ProjectGalleryProps {
   title: string;
 }
 
+const ROW_HEIGHT_CLASSES = "h-[320px] sm:h-[420px] lg:h-[520px]";
+
+interface GalleryTileButtonProps {
+  src: string;
+  alt: string;
+  onClick: () => void;
+}
+
+function GalleryTileButton({ src, alt, onClick }: GalleryTileButtonProps) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={`Ampliar ${alt}`}
+      className="group relative block h-full w-full overflow-hidden bg-[var(--bg-surface)] text-left cursor-zoom-in"
+    >
+      <ProjectImage
+        src={src}
+        alt={alt}
+        fill
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+        className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+      />
+      <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors duration-300 group-hover:bg-black/30">
+        <ExpandIcon className="h-6 w-6 scale-90 text-white opacity-0 transition-all duration-300 group-hover:scale-100 group-hover:opacity-100" />
+      </div>
+    </button>
+  );
+}
+
 export default function ProjectGallery({ images, title }: ProjectGalleryProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const tiles = getGalleryTiles(images);
 
   const close = useCallback(() => setOpenIndex(null), []);
   const prev = useCallback(() => {
@@ -41,29 +70,38 @@ export default function ProjectGallery({ images, title }: ProjectGalleryProps) {
     };
   }, [openIndex, close, prev, next]);
 
+  const rows = groupIntoRows(images);
+
   return (
     <>
-      <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 auto-rows-[140px] sm:auto-rows-[170px] lg:auto-rows-[190px] grid-flow-row-dense gap-3 md:gap-4">
-        {tiles.map((tile, i) => (
-          <ScrollReveal key={tile.src} delay={(i % 4) * 80} className={tile.className}>
-            <button
-              type="button"
-              onClick={() => setOpenIndex(i)}
-              aria-label={`Ampliar imagen ${i + 1} de ${title}`}
-              className="group relative block h-full w-full overflow-hidden bg-[var(--bg-surface)] text-left cursor-zoom-in"
-            >
-              <ProjectImage
-                src={tile.src}
-                alt={`${title} — imagen ${i + 1}`}
-                fill
-                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-              />
-              <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors duration-300 group-hover:bg-black/30">
-                <ExpandIcon className="h-6 w-6 scale-90 text-white opacity-0 transition-all duration-300 group-hover:scale-100 group-hover:opacity-100" />
-              </div>
-            </button>
-          </ScrollReveal>
+      <div className="mt-4 flex flex-col gap-4 md:gap-6">
+        {rows.map((rowImages, rowIndex) => (
+          <div
+            key={rowImages[0].src}
+            className={`flex flex-col sm:flex-row gap-4 md:gap-6 ${ROW_HEIGHT_CLASSES}`}
+          >
+            {rowImages.map((image, i) => {
+              const index = images.indexOf(image);
+              return (
+                <ScrollReveal
+                  key={image.src}
+                  delay={((rowIndex + i) % 4) * 80}
+                  className="min-w-0"
+                  style={
+                    rowImages.length > 1
+                      ? { flexGrow: image.width / image.height, flexBasis: 0 }
+                      : { flexGrow: 1 }
+                  }
+                >
+                  <GalleryTileButton
+                    src={image.src}
+                    alt={`${title} — imagen ${index + 1}`}
+                    onClick={() => setOpenIndex(index)}
+                  />
+                </ScrollReveal>
+              );
+            })}
+          </div>
         ))}
       </div>
 

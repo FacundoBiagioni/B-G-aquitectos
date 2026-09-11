@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 
 interface ScrollRevealProps {
   children: ReactNode;
@@ -12,6 +12,9 @@ interface ScrollRevealProps {
    * needed (e.g. the hero) — the scroll-triggered rootMargin would otherwise
    * miss elements sitting near the bottom edge of the screen. */
   immediate?: boolean;
+  /** Extra inline styles, merged with the ones this component sets itself
+   * (e.g. flex-grow for a justified/row-based gallery layout). */
+  style?: CSSProperties;
 }
 
 export default function ScrollReveal({
@@ -20,6 +23,7 @@ export default function ScrollReveal({
   delay = 0,
   y = 28,
   immediate = false,
+  style,
 }: ScrollRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -50,6 +54,7 @@ export default function ScrollReveal({
     <div
       ref={ref}
       style={{
+        ...style,
         transitionDelay: `${delay}ms`,
         transform: visible ? "none" : `translateY(${y}px)`,
       }}

@@ -6,9 +6,13 @@ import { typologyLabels, statusLabels } from "@/data/projects";
 interface ProjectCardProps {
   project: Project;
   priority?: boolean;
+  /** Slightly darkens the image — used for the "también en..." row on a
+   * project page so those cards read as secondary next to the gallery
+   * above them, even though they're a similar size. */
+  dimmed?: boolean;
 }
 
-export default function ProjectCard({ project, priority = false }: ProjectCardProps) {
+export default function ProjectCard({ project, priority = false, dimmed = false }: ProjectCardProps) {
   return (
     <Link href={`/proyectos/${project.slug}`} className="group block">
       <div className="relative aspect-[4/3] overflow-hidden bg-[var(--bg-surface)]">
@@ -17,7 +21,9 @@ export default function ProjectCard({ project, priority = false }: ProjectCardPr
           alt={project.title}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          className={`object-cover transition-transform duration-700 ease-out group-hover:scale-105 ${
+            dimmed ? "brightness-50" : ""
+          }`}
           priority={priority}
         />
       </div>

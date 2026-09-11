@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import ProjectCard from "@/components/ProjectCard";
-import ProjectImage from "@/components/ProjectImage";
 import ConsultanosButton from "@/components/ConsultanosButton";
 import ScrollReveal from "@/components/ScrollReveal";
 import ProjectGallery from "@/components/ProjectGallery";
+import AnimatedProjectHero from "@/components/AnimatedProjectHero";
 import { getProjectBySlug, projects, typologyLabels, statusLabels } from "@/data/projects";
 
 interface Props {
@@ -49,35 +49,8 @@ export default async function ProjectPage({ params }: Props) {
     .filter((p) => p.slug !== project.slug && p.typology === project.typology)
     .slice(0, 3);
 
-  return (
+  const restOfPage = (
     <>
-      {/* Hero */}
-      <div className="relative h-[70vh] min-h-[500px] overflow-hidden">
-        <div className="absolute inset-0 bg-[var(--bg-surface)]">
-          <ProjectImage
-            src={project.heroImage}
-            alt={project.title}
-            fill
-            priority
-            className="object-cover opacity-80"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-[var(--bg)]/10 to-transparent" />
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 max-w-[1400px] mx-auto px-6 md:px-10 pb-12 pt-24">
-          <p className="text-[var(--accent)] text-[10px] tracking-[0.3em] uppercase mb-3">
-            {typologyLabels[project.typology]} — {project.location}
-          </p>
-          <h1 className="text-4xl md:text-6xl font-light tracking-tight text-[var(--text-primary)]">
-            {project.title}
-          </h1>
-          {project.subtitle && (
-            <p className="text-[var(--text-secondary)] text-xl font-light mt-1">
-              {project.subtitle}
-            </p>
-          )}
-        </div>
-      </div>
-
       {/* Content */}
       <div className="max-w-[1400px] mx-auto px-6 md:px-10">
         {/* Meta bar */}
@@ -127,13 +100,6 @@ export default async function ProjectPage({ params }: Props) {
               </p>
             </ScrollReveal>
 
-            {/* Gallery — tile size follows each image's real orientation
-                (landscape renders read wide, portrait photos read tall)
-                instead of forcing every photo into the same crop. Clicking
-                a tile opens it full-size in a lightbox (ProjectGallery). */}
-            {project.gallery.length > 0 && (
-              <ProjectGallery images={project.gallery} title={project.title} />
-            )}
           </div>
 
           {/* Sidebar */}
@@ -184,6 +150,18 @@ export default async function ProjectPage({ params }: Props) {
             </div>
           </ScrollReveal>
         </div>
+
+        {/* Gallery — full page width (not just this 2/3 column), so it
+            picks up the width the sidebar leaves unused once Materialidad/
+            CTA run out of content. Row sizes/widths follow each photo's own
+            orientation (see ProjectGallery + lib/galleryLayout.ts). Extra
+            bottom padding so the last row gets some breathing room (on the
+            page's black background) before "También en..." starts. */}
+        {project.gallery.length > 0 && (
+          <div className="pb-16 md:pb-24">
+            <ProjectGallery images={project.gallery} title={project.title} />
+          </div>
+        )}
       </div>
 
       {/* Related projects */}
@@ -206,7 +184,7 @@ export default async function ProjectPage({ params }: Props) {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 md:gap-x-8 gap-y-12">
               {otherProjects.map((p, i) => (
                 <ScrollReveal key={p.slug} delay={i * 100}>
-                  <ProjectCard project={p} />
+                  <ProjectCard project={p} dimmed />
                 </ScrollReveal>
               ))}
             </div>
@@ -226,4 +204,9 @@ export default async function ProjectPage({ params }: Props) {
       </div>
     </>
   );
+
+  // Fullscreen shrinking-cover intro (see AnimatedProjectHero.tsx) — it only
+  // mounts the rest of the page once the intro is fully settled, so nothing
+  // below can appear before the animation actually finishes.
+  return <AnimatedProjectHero project={project}>{restOfPage}</AnimatedProjectHero>;
 }
