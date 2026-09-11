@@ -5,6 +5,7 @@ import ProjectCard from "@/components/ProjectCard";
 import ProjectImage from "@/components/ProjectImage";
 import ConsultanosButton from "@/components/ConsultanosButton";
 import ScrollReveal from "@/components/ScrollReveal";
+import ProjectGallery from "@/components/ProjectGallery";
 import { getProjectBySlug, projects, typologyLabels, statusLabels } from "@/data/projects";
 
 interface Props {
@@ -126,22 +127,12 @@ export default async function ProjectPage({ params }: Props) {
               </p>
             </ScrollReveal>
 
-            {/* Gallery */}
+            {/* Gallery — tile size follows each image's real orientation
+                (landscape renders read wide, portrait photos read tall)
+                instead of forcing every photo into the same crop. Clicking
+                a tile opens it full-size in a lightbox (ProjectGallery). */}
             {project.gallery.length > 0 && (
-              <div className="mt-4 grid grid-cols-1 gap-px bg-[var(--border)]">
-                {project.gallery.map((src, i) => (
-                  <ScrollReveal key={i} delay={(i % 3) * 100} className="bg-[var(--bg-surface)]">
-                    <div className="relative aspect-video">
-                      <ProjectImage
-                        src={src}
-                        alt={`${project.title} — imagen ${i + 1}`}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  </ScrollReveal>
-                ))}
-              </div>
+              <ProjectGallery images={project.gallery} title={project.title} />
             )}
           </div>
 
