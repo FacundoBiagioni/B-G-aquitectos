@@ -83,6 +83,15 @@ src/components/
                        valor fijo en px — con dos umbrales distintos (aparece al 30%, desaparece
                        al 50%) para que no titile justo en un solo punto. Montado una vez en
                        layout.tsx, así que aplica a todas las páginas.
+  ProjectGallery.tsx   Grid de la galería en la ficha de proyecto (usa `getGalleryTiles` de
+                       `lib/galleryLayout.ts`) + lightbox propio: click en un tile lo abre grande
+                       (`object-contain`, no recortado) con flechas prev/next, contador y cierre
+                       con Escape/click afuera/botón — todo con `position: fixed` + `z-[100]`
+                       (por encima del Navbar en z-50 y de los paneles deslizables en z-30/z-40).
+                       El hover de cada tile muestra un ícono de "ampliar" (`ExpandIcon` en
+                       `icons.tsx`) + cursor `zoom-in`, para que quede claro que son clickeables
+                       — pedido explícito del usuario porque las fotos quedaban chicas en el
+                       grid y quería poder verlas en detalle sin agrandar el grid en sí.
   LocationMap.tsx      Mapa de Leaflet (Nosotros) con la ubicación del estudio — ver Stack arriba
                        para el detalle de tiles/CSP. Import dinámico de `leaflet` dentro de un
                        useEffect (no en el top del módulo) porque la librería toca `window` en el
@@ -110,9 +119,24 @@ src/components/
 src/lib/
   gridSpans.ts         `getMosaicSpanClass(index)` — patrón 2-anchas/3-angostas del grid de
                        /proyectos en un contenedor de 6 columnas, cíclico por índice.
+  galleryLayout.ts     `getGalleryTiles(images)` — usado en la galería de la ficha de proyecto
+                       (`proyectos/[slug]/page.tsx`). A cada imagen le asigna un tamaño de grid
+                       (col-span/row-span) según su orientación REAL (aspect ratio de
+                       `width`/`height`, no adivinado): horizontal → tile ancho, vertical → tile
+                       alto, con un patrón fijo (cada 3ra imagen de cada orientación se agranda a
+                       2x2) para que se vea variado sin ser aleatorio de verdad — mismo input
+                       siempre da el mismo layout. Pedido explícito del usuario (2026-09-10): la
+                       galería anterior era "sosa", todas las imágenes apretadas en una sola
+                       columna con el mismo recorte forzado (aspect-video). El grid contenedor usa
+                       `auto-rows-[Npx]` fijo + `grid-flow-row-dense` para que los tiles chicos
+                       rellenen los huecos que dejan los grandes.
 src/data/
   projects.ts   Modelo Project + array de los 15 proyectos + helpers (getProjectBySlug,
-                getFeaturedProjects, getProjectsByTypology, typologyLabels, statusLabels)
+                getFeaturedProjects, getProjectsByTypology, typologyLabels, statusLabels).
+                `gallery` es `GalleryImage[]` (`{ src, width, height }`), no `string[]` — el
+                width/height real de cada foto es lo que alimenta `galleryLayout.ts`. Si se agrega
+                una foto nueva a un proyecto, hay que poner sus dimensiones reales ahí (con
+                `sharp` o cualquier lector de metadata), no inventarlas.
   site.ts       `homeCover`, `SITE_URL` (placeholder hasta comprar dominio real — un solo lugar
                 para cambiarlo, ver gap #5) y `siteInfo` (datos de contacto para JSON-LD).
 scripts/
@@ -215,13 +239,18 @@ merece por defecto):
 Esto se armó en sesiones previas y quedó sin terminar en algunos puntos. Antes de asumir que
 algo "ya está", verificar:
 
-1. **Galerías de proyectos rotas.** `src/data/projects.ts` referencia archivos como
-   `/projects/[slug]/render-01.jpg` o `foto-01.jpg` en el array `gallery`, pero los archivos
-   reales en `public/projects/[slug]/` tienen nombres arbitrarios (`hero1.jpg`, `WhatsApp Image
-   ....jpeg`, nombres de export tipo UUID, etc. — ver el listado real con `ls public/projects/<slug>/`
-   antes de tocar un proyecto). Hoy esas imágenes caen al placeholder por el `onError` de
-   `ProjectImage`. Para arreglar un proyecto: mirar qué archivos hay realmente en su carpeta y
-   actualizar `heroImage`/`gallery` en `projects.ts` para que apunten a los nombres reales.
+1. ~~Galerías de proyectos rotas~~ — resuelto (2026-09-10). El array `gallery` de cada proyecto
+   en `src/data/projects.ts` apuntaba a nombres inventados (`render-01.jpg`, `foto-01.jpg`) que no
+   existían; se reemplazó por los nombres reales de cada carpeta `public/projects/[slug]/`
+   (`hero1.jpg`, `WhatsApp Image ... .jpeg`, nombres de export como `1_24 - Photo.jpg`, etc. —
+   varios tienen espacios y paréntesis literales en el nombre, ya confirmado que funcionan bien
+   con `next/image`, mismo patrón que `team/fachada b+g.png`). `cdkot` no tiene ninguna imagen
+   más allá de `hero.jpg`, así que su `gallery` quedó en `[]` a propósito — no hay nada que
+   mostrar, no es un bug. Verificado con un script que confirma que las 99 rutas (`heroImage` +
+   `gallery` de los 15 proyectos) existen en disco con el mismo casing exacto (Windows no
+   distingue mayúsculas/minúsculas en paths, pero un host Linux sí). Si se agregan fotos nuevas a
+   un proyecto, listar la carpeta real (`ls public/projects/<slug>/`) antes de escribir el path
+   en `projects.ts` — no asumir un patrón de nombres.
 2. ~~Foto de equipo rota~~ — resuelto.
 3. **`public/projects/placeholder/`** existe pero está vacía — no se está usando.
 4. ~~Formulario de contacto sin Access Key~~ — resuelto, Web3Forms conectado y probado.
