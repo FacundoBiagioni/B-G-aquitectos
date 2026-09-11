@@ -3,8 +3,9 @@
  * Resizes and re-compresses images under public/ in place (same path, same
  * extension) so the repo and the images Next.js has to optimize on request
  * stay a reasonable size. Safe to re-run any time new photos are dropped in
- * public/projects, public/team or public/portada — already-small files are
- * left untouched (only overwritten if the result is smaller).
+ * public/projects, public/team, public/portada or public/inicio —
+ * already-small files are left untouched (only overwritten if the result is
+ * smaller).
  *
  * Usage: node scripts/optimize-images.mjs
  */
@@ -15,7 +16,7 @@ import sharp from "sharp";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..", "public");
-const TARGET_DIRS = ["projects", "team", "portada"];
+const TARGET_DIRS = ["projects", "team", "portada", "inicio"];
 const MAX_WIDTH = 2200;
 const JPEG_QUALITY = 80;
 const PNG_QUALITY = 80;

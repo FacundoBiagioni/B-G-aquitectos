@@ -175,7 +175,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* PROCESO / DETALLE — placeholder, reemplazar imagen por un boceto o plano real */}
+      {/* PROCESO / DETALLE */}
       <section className="border-t border-[var(--border)] py-24">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
@@ -196,12 +196,12 @@ export default function HomePage() {
               </p>
             </ScrollReveal>
             <ScrollReveal delay={150} y={40} className="order-1 md:order-2">
-              <div className="relative aspect-[4/5] bg-[var(--bg-surface)] overflow-hidden border border-[var(--border)]">
+              <div className="relative aspect-[4/3] bg-[var(--bg-surface)] overflow-hidden border border-[var(--border)]">
                 <ProjectImage
-                  src="/projects/hiarq-e25/interior.jpg"
-                  alt="Boceto de referencia — placeholder, a reemplazar"
+                  src="/inicio/dibujo.png"
+                  alt="Boceto conceptual de una vivienda — Estudio B+G"
                   fill
-                  className="object-cover grayscale contrast-75 brightness-110 opacity-30"
+                  className="object-cover"
                 />
               </div>
             </ScrollReveal>
