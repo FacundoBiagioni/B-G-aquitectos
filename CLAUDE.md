@@ -177,8 +177,14 @@ src/components/
   RightPanel.tsx       Shell genérico del panel deslizable (backdrop + panel w-full sm:w-[420px],
                        misma transición para ambos). Lo usan tanto el menú de Navbar como
                        ContactPanel — así quedan garantizadas las mismas proporciones. Prop
-                       `scrollable` (default true): ContactPanel la pasa en false porque, tras
-                       sacarle los datos de contacto (ver abajo), ya no necesita scrollear.
+                       `scrollable` (default true, disponible para casos futuros que sí necesiten
+                       desactivarla). ContactPanel la pasó a `false` brevemente (2026-09-10, tras
+                       sacarle los datos de contacto de abajo, asumiendo que ya no necesitaba
+                       scrollear) pero eso rompía el formulario en pantallas bajas — con teclado
+                       en pantalla o simplemente un celular con poca altura, el botón "Enviar
+                       mensaje" quedaba cortado y sin forma de alcanzarlo. Revertido (2026-09-11)
+                       a scrollable por defecto; en desktop/pantallas donde el contenido entra
+                       igual no tiene ningún efecto visual.
   ContactPanel.tsx     Panel de contacto — encabezado + `ContactForm` únicamente. Antes tenía
                        también email/teléfono/dirección/Instagram, pero se sacó (2026-09-10) por
                        ser contenido repetido con el Footer y con lo que se sumó a Nosotros
@@ -305,6 +311,46 @@ merece por defecto):
 - Todas las imágenes de contenido (hero, galería, cards) van envueltas en `ProjectImage`, no en
   `next/image` directo, para tener el fallback a placeholder. El logo en Navbar/Footer sí usa
   `next/image` directo con `unoptimized` (son PNGs chicos, no necesitan pasar por el optimizador).
+- **Responsive (2026-09-11):** auditado a mano en 320px, 375px y 768px de ancho (sin overflow
+  horizontal en ninguna página) después de que el usuario reportara que faltaba pulir mobile.
+  Bugs reales encontrados y arreglados:
+  - Portada de Nosotros (`fachada b+g.png`) usaba una altura fija (`min-h-[500px]`) en todos los
+    tamaños — en una pantalla angosta eso fuerza un `object-cover` a recortar casi todo el ancho
+    de la imagen (zoom excesivo, el cartel "B+G ARQUITECTOS" quedaba cortado). Ahora la altura es
+    responsive (`h-[50vh] sm:h-[60vh] md:h-[70vh]` + min-heights a juego).
+  - Lightbox de ProjectGallery: las flechas prev/next no tenían `z-index`, así que en pantallas
+    angostas la imagen (que ocupa 90vw) las tapaba — les falta margen a los costados cuando el
+    viewport es chico. Se les agregó `z-10` + `bg-black/40` (además sirve para verlas mejor
+    encima de cualquier foto, no solo en mobile).
+  - ProjectGallery en filas: el contenedor de cada fila tenía una altura FIJA en todos los
+    breakpoints (`h-[320px] sm:h-[420px]...`), y las imágenes usaban `flex-grow` proporcional a
+    su aspect ratio para repartirse el ANCHO en una fila horizontal. Por debajo de `sm:` las
+    filas son `flex-col` (apiladas) — ahí ese mismo `flex-grow` reparte ALTURA en vez de ancho,
+    así que una foto vertical en una fila con otras fotos quedaba aplastada a una tira finita.
+    Fix: la altura fija del contenedor ahora es solo `sm:`+; por debajo, cada imagen usa
+    `aspect-(--ar)` (variable CSS con su propio aspect ratio real) para altura propia, y el
+    `flex-grow`/`flex-basis:0` proporcional solo se activa en `sm:` (`sm:grow-(--ar)
+    sm:basis-0 sm:aspect-auto`) — mismo patrón: CSS custom property + utilidad arbitraria de
+    Tailwind con el prefijo de breakpoint.
+
+  Segunda ronda (mismo día, feedback después de probar lo de arriba) — **estos dos son
+  deliberadamente mobile-only, no tocar el aspecto desktop sin que el usuario lo pida**:
+  - Logo del Navbar corrido del margen izquierdo en mobile, no simétrico con el ícono de
+    hamburguesa. Causa: `logo-bg1.png` tiene ~19px de relleno transparente incorporado a la
+    izquierda de la marca visible (a la altura `h-9` que usa el Navbar) — el ícono de
+    hamburguesa es puro CSS, sin ese relleno, así que con el mismo padding de contenedor
+    terminaban asimétricos. En vez de recortar el PNG (eso cambiaría también el desktop, que el
+    usuario dijo que ya está perfecto), se le agregó al link del logo un margen negativo que
+    cancela ese relleno SOLO por debajo de `md:` (`-ml-[19px] md:ml-0`), mismo breakpoint que ya
+    usa el header para su padding (`px-6 md:px-10`).
+  - Footer en mobile: pasó de `grid-cols-1` (todo apilado en una columna) a `grid-cols-2` con la
+    marca (logo/tagline/Instagram) en `col-span-2` (su propia fila arriba) y Navegación/Contacto
+    como las dos columnas de abajo — "dos hileras verticales", pedido explícito del usuario.
+    Texto de links/contacto bajado a `text-sm` (de `text-base`) en mobile únicamente
+    (`text-sm md:text-base` en todos lados) para que entre cómodo en columnas más angostas — el
+    email lleva `break-all` porque puede llegar a no entrar en una columna de mobile sin cortarse
+    a la mitad de una palabra. De `md:` para arriba el grid vuelve a 3 columnas iguales
+    (`md:grid-cols-3 md:col-span-1`) y el texto vuelve a `text-base`, sin cambios visuales ahí.
 
 ## Estado real vs. datos — gaps conocidos
 
