@@ -37,6 +37,7 @@ export default function ProjectImage({
         sizes={sizes ?? "(max-width: 768px) 100vw, 50vw"}
         className={className}
         priority={priority}
+        draggable={false}
         onError={() => setError(true)}
       />
     );
@@ -50,6 +51,7 @@ export default function ProjectImage({
       height={height ?? 600}
       className={className}
       priority={priority}
+      draggable={false}
       onError={() => setError(true)}
     />
   );

@@ -68,7 +68,23 @@ src/components/
                        `dimmed` (usada solo en "también en...", ficha de proyecto): aplica
                        `brightness-50` a la imagen para diferenciarla de la galería de arriba,
                        que hoy ocupa un tamaño de tile parecido.
-  ProjectImage.tsx     Wrapper de next/image que hace fallback a /placeholder.svg en onError
+  ProjectImage.tsx     Wrapper de next/image que hace fallback a /placeholder.svg en onError.
+                       `draggable={false}` en el `<img>` (2026-09-11) — el arrastre nativo del
+                       navegador para imágenes (activado por default) le ganaba la mano al drag
+                       manual del carrusel justo cuando agarrabas la foto en sí: funcionaba bien
+                       en las zonas vacías entre cards pero no arrastrando desde la imagen. Como
+                       todas las imágenes de contenido pasan por este componente, el fix aplica
+                       en todo el sitio de una — no hay ningún lugar donde convenga el arrastre
+                       nativo de imágenes. **Esto solo no alcanzó**: el `<a>` de `ProjectCard.tsx`
+                       que envuelve la imagen TAMBIÉN es arrastrable por defecto (los links con
+                       `href` lo son, igual que las imágenes) — el navegador, al encontrar que el
+                       `<img>` ya no es arrastrable, sube al ancestro más cercano que sí lo sea y
+                       usa ESE como fuente del drag nativo. Hubo que agregar `draggable={false}`
+                       también en el `<Link>` de ProjectCard para que el arrastre nativo no
+                       aparezca en ningún nivel dentro del carrusel. Moraleja para la próxima vez
+                       que algo similar pase: `draggable` no es heredable ni cascadea — cada
+                       elemento de tipo `<img>`/`<a href>` en la cadena de ancestros hay que
+                       desactivarlo por separado.
   ProjectsCarousel.tsx Carrusel horizontal de TODOS los proyectos en Home: autoplay continuo
                        (rebota entre extremos) que se pausa con hover/drag/flechas y se detiene
                        del todo (sin rAF) cuando el carrusel sale del viewport. Sin scroll-snap

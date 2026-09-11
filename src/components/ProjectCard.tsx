@@ -14,7 +14,7 @@ interface ProjectCardProps {
 
 export default function ProjectCard({ project, priority = false, dimmed = false }: ProjectCardProps) {
   return (
-    <Link href={`/proyectos/${project.slug}`} className="group block">
+    <Link href={`/proyectos/${project.slug}`} className="group block" draggable={false}>
       <div className="relative aspect-[4/3] overflow-hidden bg-[var(--bg-surface)]">
         <ProjectImage
           src={project.heroImage}
