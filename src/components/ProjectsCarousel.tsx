@@ -17,6 +17,7 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
+  const hasCaptured = useRef(false);
   const dragStartX = useRef(0);
   const dragStartOffset = useRef(0);
   const [dragged, setDragged] = useState(false);
@@ -129,17 +130,28 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
     const track = trackRef.current;
     if (!track) return;
     isDragging.current = true;
+    hasCaptured.current = false;
     paused.current = true;
     setDragged(false);
     dragStartX.current = e.clientX;
     dragStartOffset.current = offset.current;
-    track.setPointerCapture(e.pointerId);
+    // Pointer capture is deferred to onPointerMove, once an actual drag is
+    // confirmed — capturing immediately here redirects mouseup/click to the
+    // track instead of whatever card is under the pointer, which silently
+    // broke navigation on a plain click (no drag at all).
   };
 
   const onPointerMove = (e: React.PointerEvent) => {
     if (!isDragging.current) return;
+    const track = trackRef.current;
+    if (!track) return;
     const dx = e.clientX - dragStartX.current;
-    if (Math.abs(dx) > 4) setDragged(true);
+    if (!hasCaptured.current) {
+      if (Math.abs(dx) <= 4) return;
+      hasCaptured.current = true;
+      setDragged(true);
+      track.setPointerCapture(e.pointerId);
+    }
     offset.current = clamp(dragStartOffset.current - dx);
     applyOffset(false);
   };
@@ -147,6 +159,7 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
   const onPointerUp = () => {
     if (!isDragging.current) return;
     isDragging.current = false;
+    hasCaptured.current = false;
     pauseTemporarily();
   };
 
