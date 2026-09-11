@@ -8,7 +8,7 @@ export default function ContactPanel() {
   const { panel, close } = usePanel();
 
   return (
-    <RightPanel open={panel === "contact"} onClose={close} scrollable={false}>
+    <RightPanel open={panel === "contact"} onClose={close}>
       <div className="flex flex-col gap-8 px-8 sm:px-10 pt-28 pb-12">
         <div>
           <p className="text-[var(--accent)] text-[10px] tracking-[0.3em] uppercase mb-3">
