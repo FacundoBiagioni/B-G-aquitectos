@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import ProjectCard from "./ProjectCard";
 import type { Project } from "@/data/projects";
 
@@ -8,20 +8,37 @@ interface ProjectsCarouselProps {
   projects: Project[];
 }
 
-const AUTOPLAY_SPEED_PX_PER_SEC = 85;
+const AUTOPLAY_SPEED_PX_PER_SEC = 116;
 const RESUME_DELAY_MS = 2200;
+const HOVER_PAUSE_DELAY_MS = 700;
+const MAX_FRAME_DT_SEC = 1 / 30;
 
 export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
   const dragStartX = useRef(0);
-  const dragStartScroll = useRef(0);
+  const dragStartOffset = useRef(0);
   const [dragged, setDragged] = useState(false);
 
+  // Position is tracked in a ref and applied via a GPU-composited transform —
+  // driving native scrollLeft every frame forces layout recalculation and was
+  // the source of the stutter; translate3d only touches the compositor.
+  const offset = useRef(0);
+  const maxScroll = useRef(0);
   const paused = useRef(false);
   const direction = useRef<1 | -1>(1);
   const resumeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hoverTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clamp = (value: number) => Math.min(Math.max(value, 0), maxScroll.current);
+
+  const applyOffset = useCallback((withTransition: boolean) => {
+    const track = trackRef.current;
+    if (!track) return;
+    track.style.transition = withTransition ? "transform 0.4s ease" : "none";
+    track.style.transform = `translate3d(${-offset.current}px, 0, 0)`;
+  }, []);
 
   const pauseTemporarily = (ms = RESUME_DELAY_MS) => {
     paused.current = true;
@@ -38,30 +55,42 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
     const track = trackRef.current;
     if (!container || !track) return;
 
+    const updateMaxScroll = () => {
+      maxScroll.current = Math.max(track.scrollWidth - container.clientWidth, 0);
+      offset.current = clamp(offset.current);
+      applyOffset(false);
+    };
+    updateMaxScroll();
+
+    const resizeObserver = new ResizeObserver(updateMaxScroll);
+    resizeObserver.observe(container);
+    resizeObserver.observe(track);
+
     let rafId: number | null = null;
     let lastTime = performance.now();
 
     const step = (time: number) => {
-      const dt = (time - lastTime) / 1000;
+      // Cap dt so a slow/delayed frame (page just loaded, tab was backgrounded,
+      // a heavy paint) can't move the track in one big visible jump — without
+      // this the carousel looks like it "starts fast" before settling down.
+      const dt = Math.min((time - lastTime) / 1000, MAX_FRAME_DT_SEC);
       lastTime = time;
-      if (!paused.current) {
-        const maxScroll = track.scrollWidth - track.clientWidth;
-        if (maxScroll > 1) {
-          let next = track.scrollLeft + direction.current * AUTOPLAY_SPEED_PX_PER_SEC * dt;
-          if (next >= maxScroll) {
-            next = maxScroll;
-            direction.current = -1;
-          } else if (next <= 0) {
-            next = 0;
-            direction.current = 1;
-          }
-          track.scrollLeft = next;
+      if (!paused.current && maxScroll.current > 1) {
+        let next = offset.current + direction.current * AUTOPLAY_SPEED_PX_PER_SEC * dt;
+        if (next >= maxScroll.current) {
+          next = maxScroll.current;
+          direction.current = -1;
+        } else if (next <= 0) {
+          next = 0;
+          direction.current = 1;
         }
+        offset.current = next;
+        applyOffset(false);
       }
       rafId = requestAnimationFrame(step);
     };
 
-    const observer = new IntersectionObserver(
+    const intersectionObserver = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           if (rafId === null) {
@@ -75,21 +104,24 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
       },
       { threshold: 0 }
     );
-    observer.observe(container);
+    intersectionObserver.observe(container);
 
     return () => {
-      observer.disconnect();
+      resizeObserver.disconnect();
+      intersectionObserver.disconnect();
       if (rafId !== null) cancelAnimationFrame(rafId);
       if (resumeTimeout.current) clearTimeout(resumeTimeout.current);
+      if (hoverTimeout.current) clearTimeout(hoverTimeout.current);
     };
-  }, []);
+  }, [applyOffset]);
 
   const scrollByCard = (dir: 1 | -1) => {
     const track = trackRef.current;
     if (!track) return;
     const card = track.querySelector<HTMLElement>("[data-card]");
     const amount = (card?.offsetWidth ?? 320) + 24;
-    track.scrollBy({ left: dir * amount, behavior: "smooth" });
+    offset.current = clamp(offset.current + dir * amount);
+    applyOffset(true);
     pauseTemporarily();
   };
 
@@ -100,17 +132,16 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
     paused.current = true;
     setDragged(false);
     dragStartX.current = e.clientX;
-    dragStartScroll.current = track.scrollLeft;
+    dragStartOffset.current = offset.current;
     track.setPointerCapture(e.pointerId);
   };
 
   const onPointerMove = (e: React.PointerEvent) => {
     if (!isDragging.current) return;
-    const track = trackRef.current;
-    if (!track) return;
     const dx = e.clientX - dragStartX.current;
     if (Math.abs(dx) > 4) setDragged(true);
-    track.scrollLeft = dragStartScroll.current - dx;
+    offset.current = clamp(dragStartOffset.current - dx);
+    applyOffset(false);
   };
 
   const onPointerUp = () => {
@@ -122,11 +153,18 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
   return (
     <div
       ref={containerRef}
-      className="relative"
+      className="relative overflow-hidden"
       onMouseEnter={() => {
-        paused.current = true;
+        if (hoverTimeout.current) clearTimeout(hoverTimeout.current);
+        hoverTimeout.current = setTimeout(() => {
+          paused.current = true;
+        }, HOVER_PAUSE_DELAY_MS);
       }}
       onMouseLeave={() => {
+        if (hoverTimeout.current) {
+          clearTimeout(hoverTimeout.current);
+          hoverTimeout.current = null;
+        }
         if (!isDragging.current) paused.current = false;
       }}
     >
@@ -142,7 +180,8 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
             e.stopPropagation();
           }
         }}
-        className="flex gap-6 md:gap-8 overflow-x-auto scroll-smooth pb-2 cursor-grab active:cursor-grabbing select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex gap-6 md:gap-8 pb-2 cursor-grab active:cursor-grabbing select-none will-change-transform"
+        style={{ touchAction: "pan-y" }}
       >
         {projects.map((project, i) => (
           <div
