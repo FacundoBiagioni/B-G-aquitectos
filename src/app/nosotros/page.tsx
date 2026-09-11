@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import ProjectImage from "@/components/ProjectImage";
 import ConsultanosButton from "@/components/ConsultanosButton";
 import ScrollReveal from "@/components/ScrollReveal";
+import LocationMap from "@/components/LocationMap";
 import JsonLd from "@/components/JsonLd";
 import { SITE_URL, siteInfo } from "@/data/site";
 
@@ -117,7 +119,11 @@ export default function NosotrosPage() {
         />
       ))}
       {/* Hero */}
-      <div className="relative h-[70vh] min-h-[500px] overflow-hidden bg-[var(--bg-surface)]">
+      <Link
+        href="/"
+        aria-label="Ir al inicio"
+        className="relative h-[70vh] min-h-[500px] overflow-hidden bg-[var(--bg-surface)] block"
+      >
         <ProjectImage
           src="/team/fachada b+g.png"
           alt="Fachada Estudio B+G"
@@ -126,7 +132,7 @@ export default function NosotrosPage() {
           className="object-cover object-[center_32%] opacity-80"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-transparent to-transparent" />
-      </div>
+      </Link>
 
       {/* Header */}
       <div className="pt-16 pb-0 max-w-[1400px] mx-auto px-6 md:px-10">
@@ -251,6 +257,24 @@ export default function NosotrosPage() {
             </ScrollReveal>
           ))}
         </div>
+      </section>
+
+      {/* Ubicación */}
+      <section className="py-16 border-t border-[var(--border)] max-w-[1400px] mx-auto px-6 md:px-10">
+        <ScrollReveal>
+          <p className="text-[var(--accent)] text-[10px] tracking-[0.3em] uppercase mb-4">
+            Dónde estamos
+          </p>
+          <h2 className="text-3xl md:text-4xl font-light tracking-tight mb-4">
+            Nuestro estudio
+          </h2>
+          <address className="not-italic text-[var(--text-secondary)] text-base leading-relaxed mb-10">
+            Cno. Centenario 2744 e/ 504 y 505, Gonnet, La Plata, Buenos Aires
+          </address>
+        </ScrollReveal>
+        <ScrollReveal delay={150} y={40}>
+          <LocationMap />
+        </ScrollReveal>
       </section>
 
       {/* CTA */}
