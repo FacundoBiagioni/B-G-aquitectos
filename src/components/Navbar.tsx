@@ -75,7 +75,7 @@ export default function Navbar() {
               src="/logo-bg1.png"
               alt="Estudio B+G Arquitectos"
               width={2172}
-              height={548}
+              height={724}
               className="h-9 w-auto object-contain drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)]"
               priority
               unoptimized

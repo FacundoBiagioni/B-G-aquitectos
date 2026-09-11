@@ -13,10 +13,10 @@ export default function Footer() {
           <div className="flex flex-col gap-5">
             <Link href="/">
               <Image
-                src="/logo-bg1.png"
+                src="/logo-bg.png"
                 alt="Estudio B+G Arquitectos"
-                width={2172}
-                height={548}
+                width={2500}
+                height={709}
                 className="h-12 w-auto object-contain opacity-90 hover:opacity-100 transition-opacity"
                 unoptimized
               />
