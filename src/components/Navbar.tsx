@@ -59,12 +59,18 @@ export default function Navbar() {
     <>
       <header className="fixed top-0 left-0 right-0 z-50 bg-transparent">
         <div className="h-16 flex items-center justify-between px-6 md:px-10">
-          {/* Logo — lingers a beat longer than the toggle on scroll-hide */}
+          {/* Logo — lingers a beat longer than the toggle on scroll-hide.
+              logo-bg1.png has ~19px of built-in transparent padding to the
+              left of the visible mark at this render height, which made it
+              sit noticeably further from the edge than the hamburger icon
+              (a plain CSS box, no such padding) on narrow screens — the
+              negative margin below cancels that out only on mobile, where
+              the header's own edge padding is tight enough for it to show. */}
           <Link
             href="/"
             aria-hidden={hideLogo}
             tabIndex={hideLogo ? -1 : undefined}
-            className={`flex items-center transition-all duration-500 ease-out delay-150 will-change-transform ${
+            className={`flex items-center -ml-[19px] md:ml-0 transition-all duration-500 ease-out delay-150 will-change-transform ${
               hideLogo
                 ? "opacity-0 pointer-events-none"
                 : hidden
