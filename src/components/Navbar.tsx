@@ -133,7 +133,7 @@ export default function Navbar() {
             </button>
           </nav>
 
-          <div className="px-10 pb-12 pt-8 border-t border-[var(--border)] mx-10 flex flex-col gap-2">
+          <div className="px-10 pb-12 pt-8 border-t border-[var(--border)] flex flex-col gap-2">
             <a
               href="mailto:estudioarq.bg@gmail.com"
               className="flex items-center gap-2 text-base text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
