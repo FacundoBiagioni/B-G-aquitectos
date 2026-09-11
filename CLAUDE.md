@@ -28,9 +28,9 @@ solo agrega contexto de implementación.
 - `npm run dev` / `npm run build` / `npm run lint` / `npm run start` (server de producción real,
   útil para probar headers/CSP que `next dev` no aplica igual).
 - `node scripts/optimize-images.mjs` — recomprime/redimensiona en el lugar todo lo que haya en
-  `public/projects`, `public/team` y `public/portada` (máx. 2200px de ancho, JPEG q80 / PNG q80,
-  solo si el resultado da más chico). Correrlo cada vez que se agreguen fotos nuevas pesadas —
-  la primera corrida bajó `public/` de ~473MB a ~35MB sin pérdida visible.
+  `public/projects`, `public/team`, `public/portada` y `public/inicio` (máx. 2200px de ancho,
+  JPEG q80 / PNG q80, solo si el resultado da más chico). Correrlo cada vez que se agreguen fotos
+  nuevas pesadas — la primera corrida bajó `public/` de ~473MB a ~35MB sin pérdida visible.
 - Dependencias: mantenerlas al día. El 2026-09-10 `npm audit` encontró una vulnerabilidad
   **crítica** en Next.js (RCE no autenticado en servidores Windows, entre otras) resuelta con
   `npm audit fix --force` (bump a 16.3.4) + alinear `eslint-config-next` a la misma versión.
@@ -64,7 +64,10 @@ src/components/
                        usa el mismo tratamiento (líneas h-0.5, no h-px).
   Footer.tsx           Usa `/logo-bg.png` (wordmark completo con "ARQUITECTOS" — el logo
                        original del estudio, distinto del isotipo del Navbar).
-  ProjectCard.tsx      Card de proyecto (usada en home, listado y "también en...")
+  ProjectCard.tsx      Card de proyecto (usada en home, listado y "también en..."). Prop
+                       `dimmed` (usada solo en "también en...", ficha de proyecto): aplica
+                       `brightness-50` a la imagen para diferenciarla de la galería de arriba,
+                       que hoy ocupa un tamaño de tile parecido.
   ProjectImage.tsx     Wrapper de next/image que hace fallback a /placeholder.svg en onError
   ProjectsCarousel.tsx Carrusel horizontal de TODOS los proyectos en Home: autoplay continuo
                        (rebota entre extremos) que se pausa con hover/drag/flechas y se detiene
@@ -78,20 +81,89 @@ src/components/
                        — usarlo para contenido ya visible sin scroll (ej. el hero de Home), porque
                        el `rootMargin` recorta el 10% inferior de la pantalla y un elemento pegado
                        abajo del todo (como los botones del hero) puede no disparar nunca sin él.
+                       Prop `style`: se mergea con el `transform`/`transitionDelay` que el
+                       componente ya setea — usado por la galería "large" de ProjectGallery para
+                       pasarle `flexGrow` a cada tile (ver ProjectGallery.tsx abajo).
   BackToTop.tsx        Botón fijo (flecha ↑) que sube al principio de la página con scroll suave.
                        Aparece/desaparece según el % de recorrido de scroll de la página, no un
                        valor fijo en px — con dos umbrales distintos (aparece al 30%, desaparece
                        al 50%) para que no titile justo en un solo punto. Montado una vez en
                        layout.tsx, así que aplica a todas las páginas.
-  ProjectGallery.tsx   Grid de la galería en la ficha de proyecto (usa `getGalleryTiles` de
-                       `lib/galleryLayout.ts`) + lightbox propio: click en un tile lo abre grande
-                       (`object-contain`, no recortado) con flechas prev/next, contador y cierre
-                       con Escape/click afuera/botón — todo con `position: fixed` + `z-[100]`
-                       (por encima del Navbar en z-50 y de los paneles deslizables en z-30/z-40).
-                       El hover de cada tile muestra un ícono de "ampliar" (`ExpandIcon` en
-                       `icons.tsx`) + cursor `zoom-in`, para que quede claro que son clickeables
-                       — pedido explícito del usuario porque las fotos quedaban chicas en el
-                       grid y quería poder verlas en detalle sin agrandar el grid en sí.
+  ProjectGallery.tsx   Galería en la ficha de proyecto, a todo el ancho de la página (no solo las
+                       2/3 partes donde vive el texto — ver `proyectos/[slug]/page.tsx`, la
+                       galería vive fuera del grid de texto+sidebar, después de que cierra).
+                       Arma filas con `lib/galleryLayout.ts` → `groupIntoRows`: cada fila tiene 1,
+                       2 o 3 fotos según un patrón fijo (`ROW_SIZE_PATTERN`, no aleatorio — mismo
+                       input siempre da el mismo layout), y dentro de una fila multi-foto cada
+                       imagen es un flex item con `flexGrow = width/height` (su propio aspect
+                       ratio) y `flexBasis: 0`, así el ancho de cada una es proporcional a su
+                       forma real en vez de partir la fila en mitades iguales — se eligió este
+                       approach en vez de un grid de columnas fijas porque el usuario pidió
+                       explícitamente que no se viera "tan perfectito", como una cuadrícula.
+                       Lightbox propio: click en un tile lo abre grande (`object-contain`, no
+                       recortado) con flechas prev/next, contador y cierre con
+                       Escape/click afuera/botón — todo con `position: fixed` + `z-[100]` (por
+                       encima del Navbar en z-50 y de los paneles deslizables en z-30/z-40). El
+                       hover de cada tile muestra un ícono de "ampliar" (`ExpandIcon` en
+                       `icons.tsx`) + cursor `zoom-in`, para que quede claro que son clickeables.
+
+                       Se probó primero solo en casa-l19-pueblo (2026-09-11) antes de aplicarlo a
+                       los 15 proyectos ese mismo día — en esa vuelta también se sacó la variante
+                       de grid de columnas fijas (`size="default"`/`"large"`, `getGalleryTiles`)
+                       que existía antes, porque ya no la usaba ninguna página.
+  AnimatedProjectHero.tsx   Portada de ficha de proyecto con intro a pantalla completa que se
+                       achica hasta el tamaño normal del hero (h-[70vh]) y luego queda "fijada"
+                       (React state `locked`, one-way — nunca vuelve a `false`): a partir de ahí
+                       se renderiza como el hero estático de siempre, así que si volvés a subir el
+                       scroll NO se repite la intro (si recargás la página sí vuelve a arrancar en
+                       pantalla completa). Recibe el resto de la página como `children` y NO los
+                       monta hasta que `locked` es true — nada de lo que está abajo existe en el
+                       DOM durante la intro, así no hay manera de que "se filtre" antes de tiempo.
+                       Es el hero de las 15 fichas de proyecto — ya no hay una variante estática
+                       separada en `page.tsx`, se sacó cuando esto pasó de prueba a definitivo.
+
+                       Reescrito por completo (2026-09-11) porque la primera versión se sentía
+                       "bugueada": esa versión ataba el progreso a `window.scrollY` real y
+                       manejaba todo con `useState` en cada evento de scroll — el scroll real de
+                       la página y el alto del spacer se retroalimentaban entre sí (el spacer
+                       encogía la altura total del documento mientras vos estabas parado adentro
+                       de ese mismo tramo), lo cual causaba saltos y el efecto de "ya veo el
+                       contenido de abajo antes de tiempo". La versión actual hace scroll-jacking
+                       de verdad: mientras no está `locked`, pone `overflow: hidden` en
+                       `<html>` y escucha `wheel`/`touchmove`/flechas del teclado directamente
+                       (con `preventDefault`) para acumular un progreso propio en un `ref` — el
+                       scroll real de la página quedó bloqueado y en 0 todo ese tiempo. Los
+                       estilos (alto del hero, font-size del texto) se escriben directo al DOM vía
+                       refs dentro de un rAF, sin pasar por `setState` en cada frame — solo se
+                       llama a `setState` una vez, al llegar a `locked = true`.
+
+                       Dos bugs de esa primera reescritura, ya arreglados (2026-09-11):
+                       1. Como el hero (fixed, cubre toda la pantalla) se va achicando en alto, el
+                          hueco que queda abajo dejaba ver el Footer real (que vive en
+                          `layout.tsx`, siempre montado, y quedaba pegado justo después de este
+                          componente en el flujo del documento) — se veía "aparecer y desaparecer"
+                          el footer apenas arrancabas a bajar. Se agregó un backdrop fijo
+                          (`fixed inset-0 bg-[var(--bg)]`) SIEMPRE a 100vh detrás del hero, así el
+                          hueco muestra el color de fondo, nunca contenido real.
+                       2. El texto (eyebrow + título + subtítulo) escalaba con
+                          `transform: scale()`, lo cual el navegador rasteriza al tamaño chico y
+                          después estira — se ve borroso. Ahora se anima el `font-size` real de
+                          cada uno por separado (medido de un clon invisible con las mismas clases
+                          que el hero estático final, así el tamaño de destino siempre coincide
+                          exacto con el breakpoint real — no un valor en px adivinado).
+
+                       Además (mismo día): el progreso ya no salta directo al valor crudo del
+                       input — un mouse wheel llega en pocos "notches" grandes, no como un flujo
+                       continuo, así que saltar al valor exacto se sentía trabado/con pasos. Ahora
+                       hay un `targetProgress` (el input crudo) y un `visualProgress` (lo que
+                       realmente se dibuja), y cada frame de un loop de rAF continuo el visual se
+                       acerca al target con un lerp (`EASE = 0.16`) — mismo truco que usan las
+                       librerías de smooth-scroll. El "lock" final espera a que el visual también
+                       haya convergido (`LOCK_EPSILON`), no solo el target, para no cortar en seco.
+
+                       Probado primero solo en casa-l19-pueblo (vía un `ANIMATED_HERO_SLUGS` que
+                       ya no existe) antes de aplicarse a los 15 proyectos el mismo día
+                       (2026-09-11), una vez que el usuario confirmó que le gustaba el resultado.
   LocationMap.tsx      Mapa de Leaflet (Nosotros) con la ubicación del estudio — ver Stack arriba
                        para el detalle de tiles/CSP. Import dinámico de `leaflet` dentro de un
                        useEffect (no en el top del módulo) porque la librería toca `window` en el
