@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import ProjectCard from "./ProjectCard";
+import { ArrowLeftIcon, ArrowRightIcon } from "./icons";
 import type { Project } from "@/data/projects";
 
 interface ProjectsCarouselProps {
@@ -212,17 +213,17 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
           type="button"
           onClick={() => scrollByCard(-1)}
           aria-label="Proyecto anterior"
-          className="w-11 h-11 flex items-center justify-center border border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-200"
+          className="w-12 h-12 flex items-center justify-center border border-[#3a3a3a] text-[var(--text-secondary)] hover:border-[var(--accent)] hover:text-[var(--accent)] hover:bg-[var(--accent-soft)] transition-colors duration-300"
         >
-          ←
+          <ArrowLeftIcon className="w-5 h-5" />
         </button>
         <button
           type="button"
           onClick={() => scrollByCard(1)}
           aria-label="Siguiente proyecto"
-          className="w-11 h-11 flex items-center justify-center border border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-200"
+          className="w-12 h-12 flex items-center justify-center border border-[#3a3a3a] text-[var(--text-secondary)] hover:border-[var(--accent)] hover:text-[var(--accent)] hover:bg-[var(--accent-soft)] transition-colors duration-300"
         >
-          →
+          <ArrowRightIcon className="w-5 h-5" />
         </button>
       </div>
     </div>

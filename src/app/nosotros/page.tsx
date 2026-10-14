@@ -6,6 +6,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import LocationMap from "@/components/LocationMap";
 import JsonLd from "@/components/JsonLd";
 import { SITE_URL, siteInfo } from "@/data/site";
+import { ArrowRightIcon } from "@/components/icons";
 
 const founders = [
   {
@@ -30,7 +31,7 @@ export const metadata: Metadata = {
     title: nosotrosTitle,
     description: nosotrosDescription,
     url: "/nosotros",
-    images: [{ url: "/team/fachada b+g.png" }],
+    images: [{ url: "/team/fachada-bg.png" }],
   },
 };
 
@@ -125,10 +126,11 @@ export default function NosotrosPage() {
         className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] min-h-[320px] sm:min-h-[400px] md:min-h-[500px] overflow-hidden bg-[var(--bg-surface)] block"
       >
         <ProjectImage
-          src="/team/fachada b+g.png"
+          src="/team/fachada-bg.png"
           alt="Fachada Estudio B+G"
           fill
           priority
+          sizes="100vw"
           className="object-cover object-[center_32%] opacity-80"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-transparent to-transparent" />
@@ -137,10 +139,8 @@ export default function NosotrosPage() {
       {/* Header */}
       <div className="pt-16 pb-0 max-w-[1400px] mx-auto px-6 md:px-10">
         <ScrollReveal>
-          <p className="text-[var(--accent)] text-[10px] tracking-[0.3em] uppercase mb-4">
-            El estudio
-          </p>
-          <h1 className="text-4xl md:text-6xl font-light tracking-tight">Nosotros</h1>
+          <p className="eyebrow mb-6">El estudio</p>
+          <h1 className="font-display text-5xl md:text-7xl leading-none">Nosotros</h1>
         </ScrollReveal>
       </div>
 
@@ -165,14 +165,15 @@ export default function NosotrosPage() {
                   className="object-cover"
                 />
               </div>
-              <p className="text-[var(--text-muted)] text-base">Con el resto del equipo</p>
+              <p className="text-[var(--text-secondary)] text-base">Con el resto del equipo</p>
             </div>
           </ScrollReveal>
           <ScrollReveal delay={150} className="flex flex-col gap-6 md:pt-4">
-            <p className="text-2xl md:text-3xl font-light leading-snug text-[var(--text-primary)]">
-              Dos arquitectos, una visión compartida sobre cómo debería ser la arquitectura.
+            <p className="font-display text-3xl md:text-4xl leading-[1.2] text-[var(--text-primary)]">
+              Dos arquitectos, una visión compartida sobre{" "}
+              <em className="text-[var(--accent)]">cómo debería ser la arquitectura</em>.
             </p>
-            <p className="text-[var(--text-secondary)] leading-relaxed">
+            <p className="text-[var(--text-secondary)] text-base md:text-lg leading-relaxed">
               Estudio B+G nació de la unión de José Luis Biagioni y Kevin Gershanik, arquitectos
               graduados de la Facultad de Arquitectura y Urbanismo de la UNLP con especialización
               en Project & Design Management en el{" "}
@@ -181,7 +182,7 @@ export default function NosotrosPage() {
               </strong>
               .
             </p>
-            <p className="text-[var(--text-secondary)] leading-relaxed">
+            <p className="text-[var(--text-secondary)] text-base md:text-lg leading-relaxed">
               Nuestra experiencia abarca desde grandes obras institucionales — como el{" "}
               <strong className="text-[var(--text-primary)] font-normal">
                 Teatro Argentino de La Plata
@@ -191,14 +192,14 @@ export default function NosotrosPage() {
               <strong className="text-[var(--text-primary)] font-normal">ONU</strong> y el{" "}
               <strong className="text-[var(--text-primary)] font-normal">BID</strong>.
             </p>
-            <p className="text-[var(--text-secondary)] leading-relaxed">
+            <p className="text-[var(--text-secondary)] text-base md:text-lg leading-relaxed">
               Hoy nos especializamos en arquitectura residencial de alto estándar y edificios en
               altura en La Plata, con un lenguaje consistente: hormigón visto, madera natural,
               vidrio y vegetación integrada.
             </p>
-            <ConsultanosButton className="self-start flex items-center gap-2 text-[var(--accent)] text-xs tracking-[0.15em] uppercase hover:gap-3 transition-all group mt-2">
+            <ConsultanosButton className="link-arrow is-accent self-start mt-2">
               Hablemos de tu proyecto
-              <span className="group-hover:translate-x-1 transition-transform">→</span>
+              <ArrowRightIcon className="w-4 h-4" />
             </ConsultanosButton>
           </ScrollReveal>
         </div>
@@ -207,18 +208,21 @@ export default function NosotrosPage() {
       {/* Formación */}
       <section className="py-16 max-w-[1400px] mx-auto px-6 md:px-10 border-b border-[var(--border)]">
         <ScrollReveal>
-          <p className="text-[var(--accent)] text-[10px] tracking-[0.3em] uppercase mb-10">
-            Formación académica
-          </p>
+          <p className="eyebrow mb-5">Formación académica</p>
+          <h2 className="font-display text-4xl md:text-5xl mb-12">Formación</h2>
         </ScrollReveal>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[var(--border)]">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[var(--border)] border border-[var(--border)]">
           {credentials.map((c, i) => (
             <ScrollReveal key={i} delay={(i % 2) * 100} className="bg-[var(--bg)]">
-              <div className="p-6 flex flex-col gap-1">
-                <p className="text-[var(--text-muted)] text-[10px] tracking-widest uppercase">
+              <div className="group relative p-8 h-full flex flex-col gap-2 hover:bg-[var(--bg-surface)] transition-colors duration-300">
+                <span
+                  className="absolute top-0 left-0 h-px w-full bg-[var(--accent)] scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                  aria-hidden
+                />
+                <p className="text-[var(--accent)] text-[10px] tracking-[0.25em] uppercase mb-2">
                   {c.year}
                 </p>
-                <p className="text-[var(--text-primary)] font-light">{c.institution}</p>
+                <p className="font-display text-2xl text-[var(--text-primary)]">{c.institution}</p>
                 <p className="text-[var(--text-secondary)] text-base">{c.degree}</p>
               </div>
             </ScrollReveal>
@@ -229,30 +233,32 @@ export default function NosotrosPage() {
       {/* Antecedentes */}
       <section className="py-16 max-w-[1400px] mx-auto px-6 md:px-10">
         <ScrollReveal>
-          <p className="text-[var(--accent)] text-[10px] tracking-[0.3em] uppercase mb-10">
-            Antecedentes institucionales
-          </p>
+          <p className="eyebrow mb-5">Antecedentes institucionales</p>
+          <h2 className="font-display text-4xl md:text-5xl mb-12">Trayectoria</h2>
         </ScrollReveal>
-        <div className="flex flex-col divide-y divide-[var(--border)]">
+        <div className="flex flex-col divide-y divide-[var(--border)] border-y border-[var(--border)]">
           {antecedentes.map((a, i) => (
             <ScrollReveal key={i} delay={Math.min(i, 4) * 60} y={16}>
-              <div
-                className={`py-6 flex flex-col sm:flex-row sm:items-start sm:gap-8 ${
-                  a.highlight ? "" : "opacity-70"
-                }`}
-              >
-                <div className="shrink-0 w-full sm:w-48">
-                  {a.highlight && (
-                    <span className="text-[9px] tracking-widest uppercase px-2 py-0.5 border border-[var(--accent)]/40 text-[var(--accent)] rounded-full">
-                      Destacado
-                    </span>
-                  )}
-                </div>
-                <div className="flex-1 mt-2 sm:mt-0">
-                  <p className="text-[var(--text-primary)] font-light mb-1">{a.title}</p>
+              <div className="group py-7 grid grid-cols-[3rem_1fr] sm:grid-cols-[4rem_1fr_auto] gap-x-4 sm:gap-x-8 items-start">
+                <span className="font-display text-2xl text-[var(--text-muted)] group-hover:text-[var(--accent)] transition-colors duration-300 tabular-nums">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div>
+                  <p
+                    className={`font-display text-2xl md:text-3xl mb-1 ${
+                      a.highlight ? "text-[var(--text-primary)]" : "text-[var(--text-secondary)]"
+                    }`}
+                  >
+                    {a.title}
+                  </p>
                   <p className="text-[var(--text-secondary)] text-base">{a.role}</p>
-                  <p className="text-[var(--text-muted)] text-sm mt-1">{a.org}</p>
+                  <p className="text-[var(--text-muted)] text-base mt-1">{a.org}</p>
                 </div>
+                {a.highlight && (
+                  <span className="col-start-2 sm:col-start-3 mt-3 sm:mt-2 justify-self-start text-[10px] tracking-[0.2em] uppercase px-3 py-1 border border-[var(--accent)]/40 text-[var(--accent)]">
+                    Destacado
+                  </span>
+                )}
               </div>
             </ScrollReveal>
           ))}
@@ -262,10 +268,8 @@ export default function NosotrosPage() {
       {/* Ubicación */}
       <section className="py-16 border-t border-[var(--border)] max-w-[1400px] mx-auto px-6 md:px-10">
         <ScrollReveal>
-          <p className="text-[var(--accent)] text-[10px] tracking-[0.3em] uppercase mb-4">
-            Dónde estamos
-          </p>
-          <h2 className="text-3xl md:text-4xl font-light tracking-tight mb-4">
+          <p className="eyebrow mb-5">Dónde estamos</p>
+          <h2 className="font-display text-4xl md:text-5xl mb-4">
             Nuestro estudio
           </h2>
           <address className="not-italic text-[var(--text-secondary)] text-base leading-relaxed mb-10">
@@ -278,11 +282,15 @@ export default function NosotrosPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 border-t border-[var(--border)] bg-[var(--bg-surface)]">
-        <ScrollReveal className="max-w-[1400px] mx-auto px-6 md:px-10 text-center">
-          <h2 className="text-3xl font-light mb-6">¿Trabajamos juntos?</h2>
-          <ConsultanosButton className="inline-flex px-8 py-3.5 bg-[var(--text-primary)] text-[var(--bg)] text-xs tracking-[0.15em] uppercase font-medium hover:bg-[var(--accent)] transition-colors duration-300">
+      <section className="py-24 md:py-32 border-t border-[var(--border)] bg-[var(--bg-surface)]">
+        <ScrollReveal className="max-w-[1400px] mx-auto px-6 md:px-10 text-center flex flex-col items-center">
+          <p className="eyebrow mb-8">Empecemos juntos</p>
+          <h2 className="font-display text-4xl md:text-6xl mb-10">
+            ¿Trabajamos <em className="text-[var(--accent)]">juntos</em>?
+          </h2>
+          <ConsultanosButton className="btn-primary">
             Contactar al estudio
+            <ArrowRightIcon className="w-4 h-4" />
           </ConsultanosButton>
         </ScrollReveal>
       </section>

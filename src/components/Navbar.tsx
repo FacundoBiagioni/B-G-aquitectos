@@ -94,7 +94,7 @@ export default function Navbar() {
             onClick={() => (panel ? close() : openMenu())}
             aria-label={panel ? "Cerrar" : "Abrir menú"}
             aria-expanded={!!panel}
-            className={`relative w-6 h-6 flex items-center justify-center text-[var(--text-primary)] drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)] transition-all duration-300 ease-out will-change-transform ${
+            className={`relative w-11 h-11 -mr-2.5 flex items-center justify-center text-[var(--text-primary)] drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)] transition-all duration-300 ease-out will-change-transform ${
               hidden ? "opacity-0 -translate-y-3" : "opacity-100 translate-y-0"
             }`}
           >
@@ -114,28 +114,40 @@ export default function Navbar() {
 
       <RightPanel open={menuOpen} onClose={close}>
         <div className="h-full flex flex-col justify-between">
-          <nav className="flex flex-col gap-1 px-10 pt-28">
-            {navLinks.map((link) => {
+          <nav className="flex flex-col gap-2 px-10 pt-28">
+            {navLinks.map((link, i) => {
               const active = isActiveLink(pathname, link.href);
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`text-4xl sm:text-5xl font-light tracking-tight transition-colors duration-200 ${
+                  aria-current={active ? "page" : undefined}
+                  className={`group flex items-baseline gap-4 font-display text-5xl sm:text-6xl leading-tight transition-colors duration-200 ${
                     active
                       ? "text-[var(--accent)]"
                       : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                   }`}
                 >
-                  {link.label}
+                  <span className="font-sans text-[11px] tracking-[0.2em] text-[var(--text-muted)] tabular-nums">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="transition-transform duration-300 ease-out group-hover:translate-x-2">
+                    {link.label}
+                  </span>
                 </Link>
               );
             })}
             <button
+              type="button"
               onClick={openContact}
-              className="text-left text-4xl sm:text-5xl font-light tracking-tight transition-colors duration-200 text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+              className="group flex items-baseline gap-4 text-left font-display text-5xl sm:text-6xl leading-tight transition-colors duration-200 text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
             >
-              Contacto
+              <span className="font-sans text-[11px] tracking-[0.2em] text-[var(--text-muted)] tabular-nums">
+                {String(navLinks.length + 1).padStart(2, "0")}
+              </span>
+              <span className="transition-transform duration-300 ease-out group-hover:translate-x-2">
+                Contacto
+              </span>
             </button>
           </nav>
 

@@ -57,3 +57,29 @@ export function ExpandIcon({ className }: IconProps) {
     </svg>
   );
 }
+
+export function ArrowRightIcon({ className }: IconProps) {
+  return (
+    <svg {...baseProps} strokeWidth={1.5} className={className} aria-hidden>
+      <path d="M4 12h16" />
+      <path d="m14 6 6 6-6 6" />
+    </svg>
+  );
+}
+
+export function ArrowLeftIcon({ className }: IconProps) {
+  return (
+    <svg {...baseProps} strokeWidth={1.5} className={className} aria-hidden>
+      <path d="M20 12H4" />
+      <path d="m10 6-6 6 6 6" />
+    </svg>
+  );
+}
+
+export function CheckIcon({ className }: IconProps) {
+  return (
+    <svg {...baseProps} className={className} aria-hidden>
+      <path d="M20 6 9 17l-5-5" />
+    </svg>
+  );
+}

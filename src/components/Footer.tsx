@@ -21,14 +21,14 @@ export default function Footer() {
                 unoptimized
               />
             </Link>
-            <p className="text-[var(--text-secondary)] text-sm md:text-base leading-relaxed max-w-xs">
+            <p className="font-display text-xl md:text-2xl leading-snug text-[var(--text-primary)] max-w-xs">
               Arquitectura elegante, honesta y contemporánea, pensada para perdurar en el tiempo.
             </p>
             <a
               href="https://www.instagram.com/estudioarq.bg/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[var(--text-muted)] text-xs tracking-widest uppercase hover:text-[var(--accent)] transition-colors"
+              className="self-start text-[var(--text-secondary)] text-xs tracking-widest uppercase hover:text-[var(--accent)] transition-colors"
             >
               @estudioarq.bg
             </a>

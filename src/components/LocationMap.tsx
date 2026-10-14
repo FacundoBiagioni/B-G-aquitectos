@@ -72,7 +72,7 @@ export default function LocationMap() {
   return (
     <div
       ref={containerRef}
-      className="map-dark h-[420px] md:h-[520px] w-full border border-[var(--border)]"
+      className="map-dark relative z-0 isolate h-[420px] md:h-[520px] w-full border border-[var(--border)]"
       role="application"
       aria-label="Mapa de ubicación de Estudio B+G Arquitectura"
       tabIndex={0}

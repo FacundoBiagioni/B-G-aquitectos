@@ -37,30 +37,48 @@ export default function ProyectosClient() {
   return (
     <>
       {/* Header */}
-      <div className="pt-32 pb-12 max-w-[1400px] mx-auto px-6 md:px-10">
+      <div className="pt-36 md:pt-44 pb-12 max-w-[1400px] mx-auto px-6 md:px-10">
         <ScrollReveal>
-          <p className="text-[var(--accent)] text-[10px] tracking-[0.3em] uppercase mb-4">
-            Portfolio
-          </p>
-          <h1 className="text-4xl md:text-5xl font-light tracking-tight mb-10">
-            Proyectos
-          </h1>
+          <p className="eyebrow mb-6">Portfolio</p>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
+            <h1 className="font-display text-5xl md:text-7xl leading-none">Proyectos</h1>
+            <p className="text-[var(--text-secondary)] text-base md:text-lg leading-relaxed max-w-md">
+              Edificios en altura, casas en barrios privados y arquitectura comercial en La
+              Plata y alrededores.
+            </p>
+          </div>
 
           {/* Filters */}
-          <div className="flex flex-wrap gap-6 md:gap-8 border-b border-[var(--border)] pb-6">
-            {filters.map((f) => (
-              <button
-                key={f.value}
-                onClick={() => setActive(f.value)}
-                className={`text-xs tracking-[0.15em] uppercase pb-1 border-b transition-colors duration-200 ${
-                  active === f.value
-                    ? "text-[var(--text-primary)] border-[var(--accent)]"
-                    : "text-[var(--text-muted)] border-transparent hover:text-[var(--text-secondary)]"
-                }`}
-              >
-                {f.label}
-              </button>
-            ))}
+          <div
+            role="group"
+            aria-label="Filtrar por tipología"
+            className="flex flex-wrap gap-x-8 gap-y-2 border-b border-[var(--border)]"
+          >
+            {filters.map((f) => {
+              const isActive = active === f.value;
+              return (
+                <button
+                  key={f.value}
+                  type="button"
+                  onClick={() => setActive(f.value)}
+                  aria-pressed={isActive}
+                  className={`relative min-h-[44px] -mb-px flex items-center gap-2 text-xs tracking-[0.15em] uppercase border-b transition-colors duration-200 ${
+                    isActive
+                      ? "text-[var(--text-primary)] border-[var(--accent)]"
+                      : "text-[var(--text-secondary)] border-transparent hover:text-[var(--text-primary)]"
+                  }`}
+                >
+                  {f.label}
+                  <span
+                    className={`text-[10px] tabular-nums ${
+                      isActive ? "text-[var(--accent)]" : "text-[var(--text-muted)]"
+                    }`}
+                  >
+                    {String(f.count).padStart(2, "0")}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </ScrollReveal>
       </div>

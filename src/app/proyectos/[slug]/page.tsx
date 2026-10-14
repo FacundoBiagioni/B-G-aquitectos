@@ -6,6 +6,7 @@ import ConsultanosButton from "@/components/ConsultanosButton";
 import ScrollReveal from "@/components/ScrollReveal";
 import ProjectGallery from "@/components/ProjectGallery";
 import AnimatedProjectHero from "@/components/AnimatedProjectHero";
+import { ArrowLeftIcon, ArrowRightIcon } from "@/components/icons";
 import { getProjectBySlug, projects, typologyLabels, statusLabels } from "@/data/projects";
 
 interface Props {
@@ -49,26 +50,31 @@ export default async function ProjectPage({ params }: Props) {
     .filter((p) => p.slug !== project.slug && p.typology === project.typology)
     .slice(0, 3);
 
+  // Prev/next across the whole portfolio (wraps around), in data order.
+  const index = projects.findIndex((p) => p.slug === project.slug);
+  const prevProject = projects[(index - 1 + projects.length) % projects.length];
+  const nextProject = projects[(index + 1) % projects.length];
+
   const restOfPage = (
     <>
       {/* Content */}
       <div className="max-w-[1400px] mx-auto px-6 md:px-10">
         {/* Meta bar */}
-        <ScrollReveal className="border-b border-[var(--border)] py-6 flex flex-wrap gap-6 items-center justify-between">
-          <div className="flex flex-wrap gap-6">
+        <ScrollReveal className="border-b border-[var(--border)] py-8 flex flex-wrap gap-6 items-center justify-between">
+          <div className="flex flex-wrap gap-x-12 gap-y-6">
             <div>
-              <p className="text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase mb-1">Año</p>
+              <p className="text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase mb-1.5">Año</p>
               <p className="text-[var(--text-primary)] text-base">{project.year}</p>
             </div>
             <div>
-              <p className="text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase mb-1">Tipología</p>
+              <p className="text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase mb-1.5">Tipología</p>
               <p className="text-[var(--text-primary)] text-base capitalize">
                 {typologyLabels[project.typology]}
               </p>
             </div>
             {project.area && (
               <div>
-                <p className="text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase mb-1">Programa</p>
+                <p className="text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase mb-1.5">Programa</p>
                 <p className="text-[var(--text-primary)] text-base">{project.area}</p>
               </div>
             )}
@@ -87,7 +93,7 @@ export default async function ProjectPage({ params }: Props) {
               <p className="text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase mb-4">
                 Concepto
               </p>
-              <p className="text-xl md:text-2xl font-light leading-snug text-[var(--text-primary)]">
+              <p className="font-display text-3xl md:text-4xl leading-[1.2] text-[var(--text-primary)]">
                 {project.concept}
               </p>
             </ScrollReveal>
@@ -95,7 +101,7 @@ export default async function ProjectPage({ params }: Props) {
               <p className="text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase mb-4">
                 Descripción
               </p>
-              <p className="text-[var(--text-secondary)] leading-relaxed text-base">
+              <p className="text-[var(--text-secondary)] leading-relaxed text-base md:text-lg max-w-2xl">
                 {project.description}
               </p>
             </ScrollReveal>
@@ -103,7 +109,7 @@ export default async function ProjectPage({ params }: Props) {
           </div>
 
           {/* Sidebar */}
-          <ScrollReveal delay={150} className="flex flex-col gap-8">
+          <ScrollReveal delay={150} className="flex flex-col gap-10 lg:sticky lg:top-24 self-start">
             {/* Materialidad */}
             <div>
               <p className="text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase mb-4">
@@ -137,15 +143,17 @@ export default async function ProjectPage({ params }: Props) {
             )}
 
             {/* CTA */}
-            <div className="border border-[var(--border)] p-6 flex flex-col gap-3">
-              <p className="text-[var(--text-primary)] text-base font-light">
+            <div className="relative border border-[var(--border)] bg-[var(--bg-surface)] p-7 flex flex-col gap-3">
+              <span className="absolute top-0 left-0 w-10 h-px bg-[var(--accent)]" aria-hidden />
+              <p className="font-display text-2xl text-[var(--text-primary)]">
                 ¿Te interesa un proyecto similar?
               </p>
-              <p className="text-[var(--text-secondary)] text-sm leading-relaxed">
+              <p className="text-[var(--text-secondary)] text-base leading-relaxed">
                 Contanos sobre tu idea y te respondemos a la brevedad.
               </p>
-              <ConsultanosButton className="mt-2 px-5 py-2.5 bg-[var(--text-primary)] text-[var(--bg)] text-xs tracking-[0.1em] uppercase text-center hover:bg-[var(--accent)] transition-colors duration-300">
+              <ConsultanosButton className="btn-primary mt-3">
                 Consultanos
+                <ArrowRightIcon className="w-4 h-4" />
               </ConsultanosButton>
             </div>
           </ScrollReveal>
@@ -173,11 +181,9 @@ export default async function ProjectPage({ params }: Props) {
                 <p className="text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase">
                   También en {typologyLabels[project.typology]}
                 </p>
-                <Link
-                  href="/proyectos"
-                  className="text-[var(--text-secondary)] text-xs tracking-[0.15em] uppercase hover:text-[var(--text-primary)] transition-colors"
-                >
-                  Ver todos →
+                <Link href="/proyectos" className="link-arrow">
+                  Ver todos
+                  <ArrowRightIcon className="w-4 h-4" />
                 </Link>
               </div>
             </ScrollReveal>
@@ -192,13 +198,40 @@ export default async function ProjectPage({ params }: Props) {
         </section>
       )}
 
-      {/* Nav back */}
-      <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-8 border-t border-[var(--border)]">
+      {/* Prev / next */}
+      <nav
+        aria-label="Otros proyectos"
+        className="border-t border-[var(--border)] grid grid-cols-2"
+      >
         <Link
-          href="/proyectos"
-          className="flex items-center gap-2 text-[var(--text-secondary)] text-xs tracking-[0.15em] uppercase hover:text-[var(--text-primary)] transition-colors group"
+          href={`/proyectos/${prevProject.slug}`}
+          className="group px-6 md:px-10 py-10 md:py-14 border-r border-[var(--border)] hover:bg-[var(--bg-surface)] transition-colors duration-300"
         >
-          <span className="group-hover:-translate-x-1 transition-transform">←</span>
+          <span className="flex items-center gap-2 text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase mb-3">
+            <ArrowLeftIcon className="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-1" />
+            Anterior
+          </span>
+          <span className="font-display text-xl md:text-3xl text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors">
+            {prevProject.title}
+          </span>
+        </Link>
+        <Link
+          href={`/proyectos/${nextProject.slug}`}
+          className="group px-6 md:px-10 py-10 md:py-14 text-right hover:bg-[var(--bg-surface)] transition-colors duration-300"
+        >
+          <span className="flex items-center justify-end gap-2 text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase mb-3">
+            Siguiente
+            <ArrowRightIcon className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </span>
+          <span className="font-display text-xl md:text-3xl text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors">
+            {nextProject.title}
+          </span>
+        </Link>
+      </nav>
+
+      <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-6 border-t border-[var(--border)]">
+        <Link href="/proyectos" className="link-arrow is-back">
+          <ArrowLeftIcon className="w-4 h-4" />
           Volver a proyectos
         </Link>
       </div>

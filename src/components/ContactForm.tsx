@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ArrowRightIcon, CheckIcon } from "./icons";
 
 type FormData = {
   nombre: string;
@@ -56,22 +57,24 @@ export default function ContactForm() {
     }
   };
 
+
   if (status === "sent") {
     return (
-      <div className="flex flex-col items-start justify-center gap-4 py-8">
-        <div className="w-10 h-10 border border-[var(--accent)] flex items-center justify-center">
-          <span className="text-[var(--accent)] text-lg">✓</span>
+      <div role="status" className="flex flex-col items-start justify-center gap-4 py-8">
+        <div className="w-12 h-12 border border-[var(--accent)] flex items-center justify-center text-[var(--accent)]">
+          <CheckIcon className="w-5 h-5" />
         </div>
-        <h3 className="text-2xl font-light">¡Mensaje enviado!</h3>
-        <p className="text-[var(--text-secondary)] leading-relaxed text-sm">
+        <h3 className="font-display text-3xl">¡Mensaje enviado!</h3>
+        <p className="text-[var(--text-secondary)] leading-relaxed text-base">
           Gracias por escribirnos. Te respondemos a la brevedad, generalmente dentro de las 24 hs.
         </p>
         <button
+          type="button"
           onClick={() => {
             setStatus("idle");
             setForm(emptyForm);
           }}
-          className="mt-4 text-[var(--accent)] text-xs tracking-[0.15em] uppercase hover:underline"
+          className="link-arrow is-accent mt-2"
         >
           Enviar otro mensaje
         </button>
@@ -81,104 +84,153 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-      <div className="flex flex-col gap-2">
-        <label className="text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase">
-          Nombre *
-        </label>
+      <Field id="cf-nombre" label="Nombre" required>
         <input
+          id="cf-nombre"
           type="text"
           name="nombre"
           required
+          autoComplete="name"
           value={form.nombre}
           onChange={handleChange}
           placeholder="Tu nombre"
-          className="bg-transparent border border-[var(--border)] px-4 py-3 text-[var(--text-primary)] text-sm placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--text-secondary)] transition-colors"
+          className={inputClass}
         />
-      </div>
+      </Field>
 
-      <div className="flex flex-col gap-2">
-        <label className="text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase">
-          Email *
-        </label>
+      <Field id="cf-email" label="Email" required>
         <input
+          id="cf-email"
           type="email"
           name="email"
           required
+          autoComplete="email"
           value={form.email}
           onChange={handleChange}
           placeholder="tu@email.com"
-          className="bg-transparent border border-[var(--border)] px-4 py-3 text-[var(--text-primary)] text-sm placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--text-secondary)] transition-colors"
+          className={inputClass}
         />
-      </div>
+      </Field>
 
-      <div className="flex flex-col gap-2">
-        <label className="text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase">
-          Teléfono
-        </label>
+      <Field id="cf-telefono" label="Teléfono">
         <input
+          id="cf-telefono"
           type="tel"
           name="telefono"
+          autoComplete="tel"
           value={form.telefono}
           onChange={handleChange}
           placeholder="0221 15 000-0000"
-          className="bg-transparent border border-[var(--border)] px-4 py-3 text-[var(--text-primary)] text-sm placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--text-secondary)] transition-colors"
+          className={inputClass}
         />
-      </div>
+      </Field>
 
-      <div className="flex flex-col gap-2">
-        <label className="text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase">
-          Tipo de proyecto *
-        </label>
-        <select
-          name="tipo"
-          required
-          value={form.tipo}
-          onChange={handleChange}
-          className="bg-[var(--bg)] border border-[var(--border)] px-4 py-3 text-sm focus:outline-none focus:border-[var(--text-secondary)] transition-colors appearance-none cursor-pointer text-[var(--text-primary)]"
-        >
-          <option value="" disabled className="text-[var(--text-muted)]">
-            Seleccioná una opción
-          </option>
-          {tiposDeProyecto.map((t) => (
-            <option key={t} value={t}>
-              {t}
+      <Field id="cf-tipo" label="Tipo de proyecto" required>
+        <div className="relative">
+          <select
+            id="cf-tipo"
+            name="tipo"
+            required
+            value={form.tipo}
+            onChange={handleChange}
+            className={`${inputClass} w-full appearance-none pr-10 bg-[var(--bg)] ${
+              form.tipo ? "" : "text-[var(--text-muted)]"
+            }`}
+          >
+            <option value="" disabled>
+              Seleccioná una opción
             </option>
-          ))}
-        </select>
-      </div>
+            {tiposDeProyecto.map((t) => (
+              <option key={t} value={t} className="text-[var(--text-primary)]">
+                {t}
+              </option>
+            ))}
+          </select>
+          {/* appearance-none hides the native arrow — draw our own. */}
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={1.5}
+            className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-secondary)]"
+            aria-hidden
+          >
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </div>
+      </Field>
 
-      <div className="flex flex-col gap-2">
-        <label className="text-[var(--text-muted)] text-[10px] tracking-[0.2em] uppercase">
-          Mensaje *
-        </label>
+      <Field id="cf-mensaje" label="Mensaje" required>
         <textarea
+          id="cf-mensaje"
           name="mensaje"
           required
           value={form.mensaje}
           onChange={handleChange}
           rows={4}
           placeholder="Contanos sobre tu proyecto. Ubicación, m² estimados, necesidades especiales..."
-          className="bg-transparent border border-[var(--border)] px-4 py-3 text-[var(--text-primary)] text-sm placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--text-secondary)] transition-colors resize-none"
+          className={`${inputClass} resize-none`}
         />
-      </div>
+      </Field>
 
-      <button
-        type="submit"
-        disabled={status === "sending"}
-        className="px-8 py-3.5 bg-[var(--text-primary)] text-[var(--bg)] text-xs tracking-[0.15em] uppercase font-medium hover:bg-[var(--accent)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300"
-      >
-        {status === "sending" ? "Enviando..." : "Enviar mensaje"}
+      <button type="submit" disabled={status === "sending"} className="btn-primary mt-1">
+        {status === "sending" ? (
+          <>
+            <span
+              className="w-4 h-4 border border-current border-t-transparent rounded-full animate-spin"
+              aria-hidden
+            />
+            Enviando...
+          </>
+        ) : (
+          <>
+            Enviar mensaje
+            <ArrowRightIcon className="w-4 h-4" />
+          </>
+        )}
       </button>
 
-      {status === "error" && (
-        <p className="text-red-400 text-xs">
-          No pudimos enviar el mensaje. Escribinos directo a{" "}
-          <a href="mailto:estudioarq.bg@gmail.com" className="underline">
-            estudioarq.bg@gmail.com
-          </a>
-          .
-        </p>
-      )}
+      <div aria-live="polite">
+        {status === "error" && (
+          <p className="text-red-400 text-base leading-relaxed">
+            No pudimos enviar el mensaje. Escribinos directo a{" "}
+            <a href="mailto:estudioarq.bg@gmail.com" className="underline">
+              estudioarq.bg@gmail.com
+            </a>
+            .
+          </p>
+        )}
+      </div>
     </form>
+  );
+}
+
+// text-base (16px) on inputs also stops iOS Safari from zooming in on focus.
+const inputClass =
+  "bg-transparent border border-[var(--border)] px-4 py-3 text-[var(--text-primary)] text-base placeholder:text-[var(--text-muted)] hover:border-[#3a3a3a] focus:outline-none focus:border-[var(--accent)] transition-colors duration-200";
+
+function Field({
+  id,
+  label,
+  required = false,
+  children,
+}: {
+  id: string;
+  label: string;
+  required?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-2">
+      <label htmlFor={id} className="text-[var(--text-secondary)] text-[11px] tracking-[0.2em] uppercase">
+        {label}
+        {required && (
+          <span className="text-[var(--accent)] ml-1" aria-hidden>
+            *
+          </span>
+        )}
+      </label>
+      {children}
+    </div>
   );
 }

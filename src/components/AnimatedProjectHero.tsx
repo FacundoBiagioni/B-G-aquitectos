@@ -62,7 +62,7 @@ function HeroText({ project, eyebrowRef, titleRef, subtitleRef }: HeroTextProps)
       </p>
       <h1
         ref={titleRef}
-        className="text-4xl md:text-6xl font-light tracking-tight text-[var(--text-primary)]"
+        className="font-display text-5xl md:text-7xl leading-[1.05] text-[var(--text-primary)]"
       >
         {project.title}
       </h1>
@@ -119,8 +119,18 @@ export default function AnimatedProjectHero({ project, children }: AnimatedProje
   const measureSubtitleRef = useRef<HTMLParagraphElement>(null);
   const endSizes = useRef({ eyebrow: 10, title: 60, subtitle: 20 });
 
+  const scrollHintRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (locked) return;
+
+    // Scroll-jacking is a known motion-sickness trigger — with reduced
+    // motion on, skip the intro and render the settled hero directly.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      lockedRef.current = true;
+      const raf = requestAnimationFrame(() => setLocked(true));
+      return () => cancelAnimationFrame(raf);
+    }
 
     const measure = () => {
       if (measureEyebrowRef.current) {
@@ -144,6 +154,7 @@ export default function AnimatedProjectHero({ project, children }: AnimatedProje
       if (eyebrowRef.current) eyebrowRef.current.style.fontSize = `${endSizes.current.eyebrow * scale}px`;
       if (titleRef.current) titleRef.current.style.fontSize = `${endSizes.current.title * scale}px`;
       if (subtitleRef.current) subtitleRef.current.style.fontSize = `${endSizes.current.subtitle * scale}px`;
+      if (scrollHintRef.current) scrollHintRef.current.style.opacity = `${Math.max(0, 1 - p * 4)}`;
     };
 
     let rafId: number | null = null;
@@ -254,6 +265,20 @@ export default function AnimatedProjectHero({ project, children }: AnimatedProje
             titleRef={titleRef}
             subtitleRef={subtitleRef}
           />
+        </div>
+        {/* Scroll cue — tells first-time visitors the page continues; fades
+            out as soon as the intro starts moving. */}
+        <div
+          ref={scrollHintRef}
+          className="absolute bottom-8 right-10 hidden md:flex flex-col items-center gap-3 pointer-events-none"
+          aria-hidden
+        >
+          <span className="text-[var(--text-primary)]/80 text-[10px] tracking-[0.3em] uppercase [writing-mode:vertical-rl]">
+            Scroll
+          </span>
+          <div className="w-px h-10 bg-white/15 overflow-hidden">
+            <div className="w-full h-full bg-[var(--accent)] scroll-line" />
+          </div>
         </div>
       </div>
       {/* Invisible measurement clone — same markup/classes as the final

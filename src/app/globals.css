@@ -6,10 +6,16 @@
   --bg-elevated: #1a1a1a;
   --border: #222222;
   --text-primary: #f5f5f5;
-  --text-secondary: #888888;
-  --text-muted: #444444;
+  /* Contrast pass (2026-10-14, ui-ux-pro-max audit): secondary was #888
+     and muted #444 — muted measured ~2:1 on --bg, under the 4.5:1 minimum
+     for text, and the studio's audience includes older readers. Both
+     raised; muted still reads as a step below secondary. */
+  --text-secondary: #a6a6a6;
+  --text-muted: #7c7c7c;
   --accent: #c8a96e;
   --accent-hover: #d4b87c;
+  --accent-soft: rgba(200, 169, 110, 0.12);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @theme inline {
@@ -23,6 +29,7 @@
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --font-sans: var(--font-geist-sans);
+  --font-display: var(--font-display-serif), Georgia, serif;
 }
 
 html {
@@ -47,13 +54,197 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
   background: var(--bg);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border);
+  background: #333;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* Tailwind v4 dropped the default pointer cursor on buttons. */
+button:not(:disabled),
+[role="button"],
+select {
+  cursor: pointer;
+}
+
+/* Visible keyboard focus everywhere (mouse clicks don't trigger it). */
+:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 4px;
+}
+
+/* Display serif for large headings — paired with Geist for everything else. */
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* Shared CTA styles, so every page's buttons match exactly. Min height 48px
+   keeps them comfortable touch targets. */
+@layer components {
+  .btn-primary,
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-height: 48px;
+    padding: 0.875rem 2rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition:
+      background-color 300ms ease,
+      color 300ms ease,
+      border-color 300ms ease;
+  }
+  .btn-primary {
+    background: var(--text-primary);
+    color: var(--bg);
+  }
+  .btn-primary:hover {
+    background: var(--accent);
+  }
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .btn-ghost {
+    border: 1px solid #3a3a3a;
+    color: var(--text-primary);
+    background: rgba(10, 10, 10, 0.25);
+    backdrop-filter: blur(6px);
+  }
+  .btn-ghost:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .btn-primary svg,
+  .btn-ghost svg,
+  .link-arrow svg {
+    transition: transform 300ms var(--ease-out-expo);
+  }
+  .btn-primary:hover svg,
+  .btn-ghost:hover svg,
+  .link-arrow:hover svg {
+    transform: translateX(4px);
+  }
+
+  /* Text link with a trailing arrow and an underline that draws in on hover. */
+  .link-arrow {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 44px;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    transition: color 200ms ease;
+  }
+  .link-arrow::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 10px;
+    height: 1px;
+    width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 400ms var(--ease-out-expo);
+  }
+  .link-arrow:hover {
+    color: var(--text-primary);
+  }
+  .link-arrow:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  .link-arrow.is-back:hover svg {
+    transform: translateX(-4px);
+  }
+  .link-arrow.is-accent {
+    color: var(--accent);
+  }
+
+  /* Small uppercase section label with a short leading rule. */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.875rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .eyebrow::before {
+    content: "";
+    width: 2rem;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.7;
+  }
+}
+
+/* Slow "Ken Burns" drift on the home hero photo. */
+@keyframes hero-drift {
+  from {
+    transform: scale(1.08);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+.hero-drift {
+  animation: hero-drift 14s var(--ease-out-expo) both;
+}
+
+/* Scroll cue: a line that keeps drawing downward. */
+@keyframes scroll-line {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  50% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  50.01% {
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+}
+.scroll-line {
+  animation: scroll-line 2.4s ease-in-out infinite;
+}
+
+/* Respect the OS "reduce motion" setting: no drift, no looping cues, no
+   reveal transitions. ScrollReveal and AnimatedProjectHero also check this
+   in JS so content renders in its final state right away. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* Leaflet map — restyled to match the site's dark, flat, square aesthetic

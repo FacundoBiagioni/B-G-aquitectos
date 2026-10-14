@@ -304,6 +304,38 @@ merece por defecto):
   sumar su dominio a `script-src`/`connect-src`/`frame-src` según corresponda — chequear la guía
   de Next antes de tocar el CSP.
 
+## Sistema visual (2026-10-14, pasada con la skill `ui-ux-pro-max`)
+
+Pasada de mejoras visuales en todo el sitio, hecha con la skill `ui-ux-pro-max` (instalada en
+`~/.claude/skills/`). Su sistema de diseño sugería negro puro con acento blanco; se descartó
+para mantener el dorado de marca, y de la skill se tomaron las reglas de contraste,
+accesibilidad, motion y tipografía. **Pendiente de aprobación del cliente** (ver `PENDIENTES.md`).
+
+- **Tipografía display:** Cormorant Garamond (`next/font`, variable `--font-display-serif`) vía
+  la clase `.font-display`, solo para títulos grandes, citas, números y títulos de cards. Geist
+  sigue para todo lo demás. Las palabras destacadas van en `<em>` dorado (itálica serif).
+  Para volver a sans alcanza con sacar `.font-display` de los títulos o apuntar
+  `--font-display` a Geist en `globals.css`.
+- **Contraste:** `--text-secondary` #888 → #a6a6a6 y `--text-muted` #444 → #7c7c7c (el muted
+  daba ~2:1, por debajo del 4.5:1 mínimo para texto).
+- **Clases compartidas en `globals.css` (`@layer components`):** `.btn-primary`, `.btn-ghost`
+  (mín. 48px de alto), `.link-arrow` (+ `.is-accent`, `.is-back`; subrayado que se dibuja al
+  hover), `.eyebrow` (etiqueta uppercase con línea previa). Usarlas en cualquier CTA nuevo en
+  vez de repetir strings largos de Tailwind. Flechas: `ArrowRightIcon`/`ArrowLeftIcon` de
+  `icons.tsx`, no el carácter "→".
+- **Motion:** easing `cubic-bezier(0.16,1,0.3,1)` en ScrollReveal y hovers; deriva lenta de la
+  foto del hero de Home (`.hero-drift`); indicador de scroll con línea animada (`.scroll-line`,
+  también en la intro de las fichas). `prefers-reduced-motion` respetado en CSS global,
+  `ScrollReveal` (muestra el estado final directo) y `AnimatedProjectHero` (saltea la intro con
+  scroll-jacking y monta el hero fijo).
+- **Foco visible** global (`:focus-visible` con outline dorado) y `cursor: pointer` en botones
+  (Tailwind v4 lo sacó del preflight).
+- Home: franja de datos (solo hechos del informe, nada inventado), manifiesto como cita grande,
+  servicios numerados que linkean a /servicios. ProjectCard: etiqueta de estado sobre la foto,
+  velo + "Ver proyecto" al hover. Ficha: sidebar `lg:sticky`, navegación anterior/siguiente
+  entre proyectos al final. Formulario: `<label htmlFor>` asociados, inputs `text-base` (evita
+  el zoom de iOS), flecha propia en el select, spinner al enviar, error con `aria-live`.
+
 ## Convenciones de diseño
 
 - Tema oscuro fijo, tokens CSS en `globals.css` (`--bg`, `--bg-surface`, `--bg-elevated`,
@@ -330,7 +362,7 @@ merece por defecto):
 - **Responsive (2026-09-11):** auditado a mano en 320px, 375px y 768px de ancho (sin overflow
   horizontal en ninguna página) después de que el usuario reportara que faltaba pulir mobile.
   Bugs reales encontrados y arreglados:
-  - Portada de Nosotros (`fachada b+g.png`) usaba una altura fija (`min-h-[500px]`) en todos los
+  - Portada de Nosotros (`fachada-bg.png`) usaba una altura fija (`min-h-[500px]`) en todos los
     tamaños — en una pantalla angosta eso fuerza un `object-cover` a recortar casi todo el ancho
     de la imagen (zoom excesivo, el cartel "B+G ARQUITECTOS" quedaba cortado). Ahora la altura es
     responsive (`h-[50vh] sm:h-[60vh] md:h-[70vh]` + min-heights a juego).
@@ -378,7 +410,7 @@ algo "ya está", verificar:
    existían; se reemplazó por los nombres reales de cada carpeta `public/projects/[slug]/`
    (`hero1.jpg`, `WhatsApp Image ... .jpeg`, nombres de export como `1_24 - Photo.jpg`, etc. —
    varios tienen espacios y paréntesis literales en el nombre, ya confirmado que funcionan bien
-   con `next/image`, mismo patrón que `team/fachada b+g.png`). `cdkot` no tiene ninguna imagen
+   con `next/image`, ver `team/fachada-bg.png` abajo: un `+` en el nombre SÍ rompe el optimizador). `cdkot` no tiene ninguna imagen
    más allá de `hero.jpg`, así que su `gallery` quedó en `[]` a propósito — no hay nada que
    mostrar, no es un bug. Verificado con un script que confirma que las 99 rutas (`heroImage` +
    `gallery` de los 15 proyectos) existen en disco con el mismo casing exacto (Windows no

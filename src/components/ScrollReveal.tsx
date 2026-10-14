@@ -29,7 +29,8 @@ export default function ScrollReveal({
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (immediate) {
+    // Reduced motion: show final state right away, no observer needed.
+    if (immediate || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       const raf = requestAnimationFrame(() => setVisible(true));
       return () => cancelAnimationFrame(raf);
     }
@@ -58,7 +59,7 @@ export default function ScrollReveal({
         transitionDelay: `${delay}ms`,
         transform: visible ? "none" : `translateY(${y}px)`,
       }}
-      className={`transition-all duration-700 ease-out ${
+      className={`transition-[opacity,transform] duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
         visible ? "opacity-100" : "opacity-0"
       } ${className}`}
     >
