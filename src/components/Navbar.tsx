@@ -6,7 +6,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import RightPanel from "./RightPanel";
 import { usePanel } from "./PanelProvider";
-import { MailIcon, InstagramIcon } from "./icons";
+import { MailIcon, InstagramIcon, WhatsAppIcon } from "./icons";
+import { whatsappContacts, whatsappUrl } from "@/data/site";
 
 const navLinks = [
   { href: "/", label: "Inicio" },
@@ -168,6 +169,26 @@ export default function Navbar() {
               <InstagramIcon className="w-4 h-4 shrink-0" />
               @estudioarq.bg
             </a>
+            <p className="flex items-center gap-2 text-base text-[var(--text-secondary)]">
+              <WhatsAppIcon className="w-4 h-4 shrink-0" />
+              <span>
+                WhatsApp:{" "}
+                {whatsappContacts.map((c, i) => (
+                  <span key={c.phone}>
+                    {i > 0 && " · "}
+                    <a
+                      href={whatsappUrl(c.phone)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`WhatsApp de ${c.name}`}
+                      className="hover:text-[var(--accent)] transition-colors"
+                    >
+                      {c.shortName}
+                    </a>
+                  </span>
+                ))}
+              </span>
+            </p>
           </div>
         </div>
       </RightPanel>

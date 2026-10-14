@@ -33,9 +33,7 @@ tiene que hacer.
       mail; si la actual se generó con otro (por ejemplo el personal de Facundo), los mensajes
       llegan ahí. Desde web3forms.com: o cambiar el mail de la key actual, o generar una nueva
       con `estudioarq.bg@gmail.com` (llega a esa casilla) y pasármela.
-- [ ] **Definir el/los número(s) de WhatsApp**: ¿uno solo del estudio, o los dos socios
-      (José Luis 0221 15 463-6769 / Kevin 0221 15 620-5669)? ¿Mensaje pre-armado al abrir el chat
-      (ej. "Hola, vengo de la web y quería consultar por...")?
+- [x] WhatsApp: se usan los dos socios, con mensaje pre-armado (aprobado 2026-10-14).
 
 ### Material que falta
 - [ ] **Fotos para las obras con pocas o ninguna imagen.** Fotos de galería hoy (sin contar la
@@ -93,11 +91,9 @@ tiene que hacer.
 ### Pedidos de la reunión
 - [x] **Página 404 propia** (`src/app/not-found.tsx`) — hecha.
 - [x] **Orden del menú**: Servicios 3.º y Nosotros 4.º (menú y Footer) — hecho.
-- [ ] **Contacto por WhatsApp sin burbuja flotante.** Propuesta: sumarlo como opción dentro del
-      panel de contacto ya existente ("Escribinos por WhatsApp" junto al formulario), en el menú
-      desplegable y en el Footer, con el ícono de línea fino del resto del sitio y link
-      `https://wa.me/549221...` con mensaje pre-armado. Mostrar 1-2 variantes antes de aplicar.
-      Depende de que Facundo defina el/los número(s).
+- [x] **Contacto por WhatsApp sin burbuja flotante** — hecho: tarjetas por socio en el panel
+      de contacto, link en el menú e ícono junto a cada teléfono del Footer (`WhatsAppContact.tsx`,
+      datos en `whatsappContacts` de `src/data/site.ts`).
 - [ ] **Conectar el formulario al mail oficial** (`estudioarq.bg@gmail.com`): si hay Access Key
       nueva, cargarla en `.env.local` y en Vercel, redeploy y probar un envío real.
 - [ ] **Portada del inicio con animación de scroll tipo video** (scroll-scrubbing: el avance de
@@ -137,3 +133,4 @@ tiene que hacer.
 - Deploy a producción en Vercel (proyecto `arquitectosbg`).
 - Página 404 propia.
 - Menú y Footer: Servicios antes que Nosotros.
+- Contacto por WhatsApp (panel, menú y Footer).

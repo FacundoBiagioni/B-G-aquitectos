@@ -19,3 +19,16 @@ export const siteInfo = {
     country: "AR",
   },
 };
+
+// WhatsApp contacts — one per partner. `phone` is the international format
+// wa.me expects (no "+", no spaces); `display` is how it's written on the site.
+export const whatsappContacts = [
+  { name: "José Luis Biagioni", shortName: "José Luis", phone: "5492214636769", display: "0221 15 463-6769" },
+  { name: "Kevin Gershanik", shortName: "Kevin", phone: "5492216205669", display: "0221 15 620-5669" },
+];
+
+const whatsappMessage = "Hola, los contacto desde la web del estudio. Quería hacerles una consulta.";
+
+export function whatsappUrl(phone: string) {
+  return `https://wa.me/${phone}?text=${encodeURIComponent(whatsappMessage)}`;
+}

@@ -2,6 +2,7 @@
 
 import RightPanel from "./RightPanel";
 import ContactForm from "./ContactForm";
+import WhatsAppContact from "./WhatsAppContact";
 import { usePanel } from "./PanelProvider";
 
 export default function ContactPanel() {
@@ -17,6 +18,16 @@ export default function ContactPanel() {
             Trabajamos en La Plata y alrededores. Si tenés una idea, un terreno o un proyecto
             en mente, escribinos.
           </p>
+        </div>
+
+        <WhatsAppContact />
+
+        <div className="flex items-center gap-4" aria-hidden>
+          <span className="flex-1 h-px bg-[var(--border)]" />
+          <span className="text-[var(--text-muted)] text-[11px] tracking-[0.2em] uppercase">
+            o dejanos un mensaje
+          </span>
+          <span className="flex-1 h-px bg-[var(--border)]" />
         </div>
 
         <ContactForm />

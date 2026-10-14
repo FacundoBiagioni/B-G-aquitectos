@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import ConsultanosButton from "./ConsultanosButton";
+import { WhatsAppIcon } from "./icons";
+import { whatsappContacts, whatsappUrl } from "@/data/site";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -68,18 +70,26 @@ export default function Footer() {
             >
               estudioarq.bg@gmail.com
             </a>
-            <a
-              href="tel:+5492214636769"
-              className="text-[var(--text-secondary)] text-sm md:text-base hover:text-[var(--text-primary)] transition-colors"
-            >
-              0221 15 463-6769
-            </a>
-            <a
-              href="tel:+5492216205669"
-              className="text-[var(--text-secondary)] text-sm md:text-base hover:text-[var(--text-primary)] transition-colors"
-            >
-              0221 15 620-5669
-            </a>
+            {whatsappContacts.map((c) => (
+              <div key={c.phone} className="flex items-center gap-3">
+                <a
+                  href={`tel:+${c.phone}`}
+                  className="text-[var(--text-secondary)] text-sm md:text-base hover:text-[var(--text-primary)] transition-colors tabular-nums"
+                >
+                  {c.display}
+                </a>
+                <a
+                  href={whatsappUrl(c.phone)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`WhatsApp de ${c.name}`}
+                  title={`WhatsApp de ${c.name}`}
+                  className="w-8 h-8 -my-1 flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors"
+                >
+                  <WhatsAppIcon className="w-4 h-4" />
+                </a>
+              </div>
+            ))}
             <address className="not-italic text-[var(--text-secondary)] text-sm md:text-base leading-relaxed">
               Cno. Centenario 2744<br />
               e/ 504 y 505, Gonnet<br />
