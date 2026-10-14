@@ -41,8 +41,8 @@ export default function Footer() {
             </p>
             {[
               { href: "/proyectos", label: "Proyectos" },
-              { href: "/nosotros", label: "Nosotros" },
               { href: "/servicios", label: "Servicios" },
+              { href: "/nosotros", label: "Nosotros" },
             ].map((link) => (
               <Link
                 key={link.href}

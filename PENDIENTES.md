@@ -92,9 +92,7 @@ tiene que hacer.
 
 ### Pedidos de la reunión
 - [x] **Página 404 propia** (`src/app/not-found.tsx`) — hecha.
-- [?] **Orden del menú**: el pedido era Nosotros 3.º y Servicios 4.º, pero ese ya es el orden
-      actual (Inicio, Proyectos, Nosotros, Servicios, Contacto), igual en el Footer. Confirmar con
-      los clientes si querían al revés (Servicios antes que Nosotros).
+- [x] **Orden del menú**: Servicios 3.º y Nosotros 4.º (menú y Footer) — hecho.
 - [ ] **Contacto por WhatsApp sin burbuja flotante.** Propuesta: sumarlo como opción dentro del
       panel de contacto ya existente ("Escribinos por WhatsApp" junto al formulario), en el menú
       desplegable y en el Footer, con el ícono de línea fino del resto del sitio y link
@@ -138,3 +136,4 @@ tiene que hacer.
 - El mapa de Nosotros ya no se superpone al menú/panel de contacto.
 - Deploy a producción en Vercel (proyecto `arquitectosbg`).
 - Página 404 propia.
+- Menú y Footer: Servicios antes que Nosotros.

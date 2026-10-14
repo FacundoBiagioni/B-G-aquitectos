@@ -11,8 +11,8 @@ import { MailIcon, InstagramIcon } from "./icons";
 const navLinks = [
   { href: "/", label: "Inicio" },
   { href: "/proyectos", label: "Proyectos" },
-  { href: "/nosotros", label: "Nosotros" },
   { href: "/servicios", label: "Servicios" },
+  { href: "/nosotros", label: "Nosotros" },
 ];
 
 function isActiveLink(pathname: string, href: string) {
