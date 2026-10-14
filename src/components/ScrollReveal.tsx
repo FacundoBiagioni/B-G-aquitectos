@@ -29,8 +29,11 @@ export default function ScrollReveal({
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
+    // `immediate` is handled purely in CSS below.
+    if (immediate) return;
+
     // Reduced motion: show final state right away, no observer needed.
-    if (immediate || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       const raf = requestAnimationFrame(() => setVisible(true));
       return () => cancelAnimationFrame(raf);
     }
@@ -50,6 +53,25 @@ export default function ScrollReveal({
     observer.observe(el);
     return () => observer.disconnect();
   }, [immediate]);
+
+  // Above-the-fold content: a CSS keyframe animation that starts on first
+  // paint, without waiting for hydration. Driving it from React state (as
+  // the scroll-triggered path does) kept the home hero heading — the page's
+  // LCP element — invisible until JS loaded: ~5s on a throttled mobile run.
+  if (immediate) {
+    return (
+      <div
+        className={`reveal-on-load ${className}`}
+        style={{
+          ...style,
+          animationDelay: `${delay}ms`,
+          ["--reveal-y" as string]: `${y}px`,
+        }}
+      >
+        {children}
+      </div>
+    );
+  }
 
   return (
     <div

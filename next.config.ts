@@ -24,6 +24,9 @@ const nextConfig: NextConfig = {
     // Skip Next's optimization pipeline in dev for faster local iteration;
     // production always optimizes (see CLAUDE.md for the image workflow).
     unoptimized: isDev,
+    // AVIF first (~20% smaller than WebP) for browsers that accept it, WebP
+    // as fallback. AVIF encodes slower on the first request, then it's cached.
+    formats: ["image/avif", "image/webp"],
   },
   async headers() {
     return [

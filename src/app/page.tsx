@@ -85,7 +85,7 @@ export default function HomePage() {
               <p className="eyebrow mb-8">Estudio B+G — La Plata, Argentina</p>
             </ScrollReveal>
             <ScrollReveal immediate delay={120}>
-              <h1 className="font-display text-[2.75rem] leading-[1.02] sm:text-6xl md:text-7xl lg:text-[5.5rem] text-[var(--text-primary)] mb-8">
+              <h1 className="font-display text-[2.5rem] leading-[1.05] sm:text-6xl md:text-7xl lg:text-[5.5rem] text-[var(--text-primary)] mb-8">
                 Arquitectura
                 <br />
                 <em className="text-[var(--accent)]">elegante, honesta</em>

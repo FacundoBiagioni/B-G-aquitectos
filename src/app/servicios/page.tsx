@@ -15,6 +15,8 @@ export const metadata: Metadata = {
     title: serviciosTitle,
     description: serviciosDescription,
     url: "/servicios",
+    // Page-level openGraph replaces the layout's entirely, so set an image here.
+    images: [{ url: "/projects/hiarq-e25/hero.jpg", alt: "Edificio HIARQ E25 — Estudio B+G Arquitectura" }],
   },
 };
 

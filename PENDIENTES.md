@@ -58,6 +58,8 @@ tiene que hacer.
 - [ ] (Opcional) Testimonios de clientes, si quieren sumar una sección de reseñas.
 
 ### Con los clientes
+- [ ] (Si se quiere IA generativa para las fotos) **cargar créditos en Higgsfield**: hoy la
+      cuenta está en plan gratis con 0 créditos.
 - [ ] **Aprobar el criterio de armonización de imágenes con IA** sobre una muestra antes de
       aplicarlo a todo (cuánto se puede retocar una foto de obra real sin que deje de ser fiel).
 - [ ] **Validar los datos de los 15 proyectos** (año, estado "en desarrollo / en obra /
@@ -67,7 +69,7 @@ tiene que hacer.
       "Andrea Jalo". Si alguno no quiere, se reemplaza por barrio/lote.
 - [ ] **Elegir logo definitivo del Navbar**: isotipo actual (`logo-bg1.png`) o el wordmark
       minimalista guardado (`logo-bg2.png`).
-- [x] Aprobar el nuevo estilo visual — aprobado (2026-10-14) salvo las tipografías.
+- [x] Aprobar el nuevo estilo visual y las tipografías (opción C) — aprobado (2026-10-14).
 
 ### Dominio y publicación
 - [ ] **Comprar el dominio** y pasarme cuál es. Hoy `SITE_URL` apunta al placeholder
@@ -100,27 +102,32 @@ tiene que hacer.
       la "película" sigue al scroll). Instalar/evaluar la skill de scroll que se elija, armar la
       secuencia de frames o video, versión estática para "reducir movimiento" y mobile liviano.
       Ojo con convivir con el patrón actual (la intro de las fichas ya usa scroll-jacking).
-- [ ] **Armonizar imágenes de obras con IA** (color, exposición, balance de blancos, cielo
-      parejo). Hacer primero una prueba con 1-2 proyectos para aprobar, guardar los originales
-      sin tocar y recién después aplicar a todo y re-optimizar.
+- [ ] **Armonizar imágenes de obras.** Prueba hecha (2026-10-14) con Casa Jorge y Nora y
+      Edificio E14: retoque de color automático no generativo (balance de blancos, niveles,
+      contraste y un tono cálido común), con `pruebas-armonizacion/armonizar.mjs`. Las
+      comparaciones antes/después están en `pruebas-armonizacion/<obra>/comparacion.jpg`
+      (no se suben a git). Los originales en `public/` no se tocaron. Falta: que los clientes lo
+      aprueben, y recién ahí aplicarlo a todo y re-optimizar. Una versión con IA generativa
+      (Higgsfield) necesita créditos: la cuenta tiene 0.
 - [x] Listar obras con pocas imágenes — hecho (tabla en "Material que falta").
 - [ ] Cargar las fotos nuevas cuando lleguen (optimizar + dimensiones reales en `projects.ts`).
 
 ### Otros pendientes
-- [ ] **Cambiar las tipografías.** La combinación Cormorant Garamond (títulos) + Geist (texto) no
-      convence a Facundo. Mostrar 2-3 opciones lado a lado antes de aplicar. El cambio está
-      concentrado en `.font-display` / `--font-display` (`globals.css`) y en `layout.tsx`.
+- [x] **Tipografías**: opción C (Outfit + Work Sans) aplicada en todo el sitio; página de
+      comparación `/tipografias` borrada.
 - [ ] Actualizar `SITE_URL` en `src/data/site.ts` cuando haya dominio.
 - [ ] **Filtro por estado en /proyectos** (Entregado / En obra / En desarrollo), además del de
-      tipología — el informe lo pide explícitamente.
-- [ ] **Centralizar datos de contacto**: email y teléfonos están escritos a mano en Navbar,
-      Footer y ContactForm; pasarlos a `siteInfo` (`src/data/site.ts`). Conviene hacerlo junto
-      con lo de WhatsApp.
-- [ ] **Protección anti-spam del formulario** (campo honeypot `botcheck` de Web3Forms).
-- [ ] **Imagen Open Graph** para Proyectos y Servicios (hoy no definen una propia).
-- [ ] Servir imágenes en **AVIF** además de WebP (`images.formats` en `next.config.ts`).
-- [ ] Auditoría Lighthouse (performance, accesibilidad, SEO) sobre el sitio publicado.
-- [ ] Borrar `public/projects/placeholder/` (carpeta vacía sin uso).
+      tipología. En pausa: a Facundo no le interesa tanto por ahora.
+- [x] Centralizar datos de contacto en `siteInfo` / `whatsappContacts` (`src/data/site.ts`).
+- [x] Protección anti-spam del formulario (honeypot `botcheck` de Web3Forms).
+- [x] Imagen Open Graph para Proyectos y Servicios.
+- [x] Imágenes en AVIF con WebP de respaldo.
+- [x] Auditoría Lighthouse (celular, build de producción local). Resultado: accesibilidad,
+      buenas prácticas y SEO 100; rendimiento Home 78 → 87-88. Arreglado en el camino: logos
+      sin optimizar (277 KB → 1,5 KB), entrada del hero que esperaba al JS, paneles cerrados
+      alcanzables con Tab (`inert`), marcador del mapa sin nombre accesible. Repetir sobre el
+      dominio real cuando esté.
+- [x] Borrada `public/projects/placeholder/`.
 - [ ] (Opcional) Analytics (Vercel Analytics o similar) — requiere sumar dominios al CSP.
 
 ---
@@ -134,3 +141,5 @@ tiene que hacer.
 - Página 404 propia.
 - Menú y Footer: Servicios antes que Nosotros.
 - Contacto por WhatsApp (panel, menú y Footer).
+- Anti-spam, datos de contacto centralizados, OG images, AVIF, auditoría Lighthouse.
+- Tipografías nuevas: Outfit + Work Sans.

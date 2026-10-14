@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import ConsultanosButton from "./ConsultanosButton";
 import { WhatsAppIcon } from "./icons";
-import { whatsappContacts, whatsappUrl } from "@/data/site";
+import { siteInfo, whatsappContacts, whatsappUrl } from "@/data/site";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -17,22 +17,21 @@ export default function Footer() {
               <Image
                 src="/logo-bg.png"
                 alt="Estudio B+G Arquitectos"
-                width={2500}
-                height={709}
+                width={169}
+                height={48}
                 className="h-12 w-auto object-contain opacity-90 hover:opacity-100 transition-opacity"
-                unoptimized
               />
             </Link>
             <p className="font-display text-xl md:text-2xl leading-snug text-[var(--text-primary)] max-w-xs">
               Arquitectura elegante, honesta y contemporánea, pensada para perdurar en el tiempo.
             </p>
             <a
-              href="https://www.instagram.com/estudioarq.bg/"
+              href={siteInfo.instagram}
               target="_blank"
               rel="noopener noreferrer"
               className="self-start text-[var(--text-secondary)] text-xs tracking-widest uppercase hover:text-[var(--accent)] transition-colors"
             >
-              @estudioarq.bg
+              {siteInfo.instagramHandle}
             </a>
           </div>
 
@@ -65,10 +64,10 @@ export default function Footer() {
               Contacto
             </p>
             <a
-              href="mailto:estudioarq.bg@gmail.com"
+              href={`mailto:${siteInfo.email}`}
               className="text-[var(--text-secondary)] text-sm md:text-base hover:text-[var(--text-primary)] transition-colors break-all"
             >
-              estudioarq.bg@gmail.com
+              {siteInfo.email}
             </a>
             {whatsappContacts.map((c) => (
               <div key={c.phone} className="flex items-center gap-3">

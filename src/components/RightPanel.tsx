@@ -45,6 +45,9 @@ export default function RightPanel({
           open ? "translate-x-0" : "translate-x-full"
         }`}
         aria-hidden={!open}
+        // inert while closed: otherwise keyboard Tab still reaches the
+        // links of the off-screen panel (flagged by Lighthouse/axe).
+        inert={!open}
       >
         {children}
       </div>

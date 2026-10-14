@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ArrowRightIcon, CheckIcon } from "./icons";
+import { siteInfo } from "@/data/site";
 
 type FormData = {
   nombre: string;
@@ -29,6 +30,9 @@ const emptyForm: FormData = {
 export default function ContactForm() {
   const [form, setForm] = useState<FormData>(emptyForm);
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  // Web3Forms honeypot: a hidden checkbox named "botcheck" that people never
+  // see, but form-filling bots tick. https://docs.web3forms.com (Spam protection)
+  const [botcheck, setBotcheck] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -38,6 +42,11 @@ export default function ContactForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Bot detected: pretend it worked and don't send anything.
+    if (botcheck) {
+      setStatus("sent");
+      return;
+    }
     setStatus("sending");
     try {
       const res = await fetch("https://api.web3forms.com/submit", {
@@ -84,6 +93,17 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+      <input
+        type="checkbox"
+        name="botcheck"
+        checked={botcheck}
+        onChange={(e) => setBotcheck(e.target.checked)}
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden
+        className="hidden"
+        style={{ display: "none" }}
+      />
       <Field id="cf-nombre" label="Nombre" required>
         <input
           id="cf-nombre"
@@ -194,8 +214,8 @@ export default function ContactForm() {
         {status === "error" && (
           <p className="text-red-400 text-base leading-relaxed">
             No pudimos enviar el mensaje. Escribinos directo a{" "}
-            <a href="mailto:estudioarq.bg@gmail.com" className="underline">
-              estudioarq.bg@gmail.com
+            <a href={`mailto:${siteInfo.email}`} className="underline">
+              {siteInfo.email}
             </a>
             .
           </p>

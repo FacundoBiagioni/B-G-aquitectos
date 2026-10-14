@@ -12,6 +12,7 @@ export const siteInfo = {
   email: "estudioarq.bg@gmail.com",
   phones: ["+5492214636769", "+5492216205669"],
   instagram: "https://www.instagram.com/estudioarq.bg/",
+  instagramHandle: "@estudioarq.bg",
   address: {
     street: "Cno. Centenario 2744 e/ 504 y 505",
     locality: "Gonnet, La Plata",

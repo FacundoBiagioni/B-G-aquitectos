@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Cormorant_Garamond } from "next/font/google";
+import { Outfit, Work_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -8,18 +8,18 @@ import ContactPanel from "@/components/ContactPanel";
 import BackToTop from "@/components/BackToTop";
 import { SITE_URL, homeCover } from "@/data/site";
 
-const geist = Geist({
-  variable: "--font-geist-sans",
+// Typography: option C from the 2026-10-14 comparison — Work Sans for text,
+// Outfit (light) for large headings via `.font-display` in globals.css.
+const bodyFont = Work_Sans({
+  variable: "--font-body",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600"],
 });
 
-// Display serif for large headings only (`.font-display` in globals.css).
-const displaySerif = Cormorant_Garamond({
-  variable: "--font-display-serif",
+const displayFont = Outfit({
+  variable: "--font-display-face",
   subsets: ["latin"],
-  weight: ["300", "400", "500"],
-  style: ["normal", "italic"],
+  weight: ["300", "400"],
 });
 
 const defaultTitle = "Estudio B+G Arquitectura | La Plata";
@@ -72,7 +72,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`${geist.variable} ${displaySerif.variable} h-full`}>
+    <html lang="es" className={`${bodyFont.variable} ${displayFont.variable} h-full`}>
       <body className="min-h-full flex flex-col bg-[var(--bg)] text-[var(--text-primary)] antialiased">
         <PanelProvider>
           <Navbar />

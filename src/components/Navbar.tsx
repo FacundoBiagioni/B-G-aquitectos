@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import RightPanel from "./RightPanel";
 import { usePanel } from "./PanelProvider";
 import { MailIcon, InstagramIcon, WhatsAppIcon } from "./icons";
-import { whatsappContacts, whatsappUrl } from "@/data/site";
+import { siteInfo, whatsappContacts, whatsappUrl } from "@/data/site";
 
 const navLinks = [
   { href: "/", label: "Inicio" },
@@ -82,11 +82,10 @@ export default function Navbar() {
             <Image
               src="/logo-bg1.png"
               alt="Estudio B+G Arquitectos"
-              width={2172}
-              height={724}
+              width={108}
+              height={36}
               className="h-9 w-auto object-contain drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)]"
               priority
-              unoptimized
             />
           </Link>
 
@@ -154,20 +153,20 @@ export default function Navbar() {
 
           <div className="px-10 pb-12 pt-8 border-t border-[var(--border)] flex flex-col gap-2">
             <a
-              href="mailto:estudioarq.bg@gmail.com"
+              href={`mailto:${siteInfo.email}`}
               className="flex items-center gap-2 text-base text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
             >
               <MailIcon className="w-4 h-4 shrink-0" />
-              estudioarq.bg@gmail.com
+              {siteInfo.email}
             </a>
             <a
-              href="https://www.instagram.com/estudioarq.bg/"
+              href={siteInfo.instagram}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-base text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
             >
               <InstagramIcon className="w-4 h-4 shrink-0" />
-              @estudioarq.bg
+              {siteInfo.instagramHandle}
             </a>
             <p className="flex items-center gap-2 text-base text-[var(--text-secondary)]">
               <WhatsAppIcon className="w-4 h-4 shrink-0" />

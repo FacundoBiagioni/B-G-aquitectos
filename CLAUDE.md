@@ -309,13 +309,16 @@ merece por defecto):
 Pasada de mejoras visuales en todo el sitio, hecha con la skill `ui-ux-pro-max` (instalada en
 `~/.claude/skills/`). Su sistema de diseño sugería negro puro con acento blanco; se descartó
 para mantener el dorado de marca, y de la skill se tomaron las reglas de contraste,
-accesibilidad, motion y tipografía. **Pendiente de aprobación del cliente** (ver `PENDIENTES.md`).
+accesibilidad, motion y tipografía. Aprobado por Facundo (2026-10-14).
 
-- **Tipografía display:** Cormorant Garamond (`next/font`, variable `--font-display-serif`) vía
-  la clase `.font-display`, solo para títulos grandes, citas, números y títulos de cards. Geist
-  sigue para todo lo demás. Las palabras destacadas van en `<em>` dorado (itálica serif).
-  Para volver a sans alcanza con sacar `.font-display` de los títulos o apuntar
-  `--font-display` a Geist en `globals.css`.
+- **Tipografía (opción C, elegida por Facundo el 2026-10-14):** **Outfit** peso 300 para
+  títulos grandes, citas, números y títulos de cards, vía la clase `.font-display`
+  (`--font-display-face`); **Work Sans** para todo el resto (`--font-body`, también es
+  `--font-sans` de Tailwind). Ambas por `next/font/google` en `layout.tsx`. Se eligió entre 5
+  opciones en una página de comparación temporal (`/tipografias`, ya borrada); antes eran
+  Cormorant Garamond + Geist. Las palabras destacadas van en `<em>` dorado — Outfit no trae
+  itálica, así que el navegador la sintetiza (oblicua); así se vio en la comparación y así se
+  aprobó. Para cambiar de fuente: solo `layout.tsx` + `.font-display` en `globals.css`.
 - **Contraste:** `--text-secondary` #888 → #a6a6a6 y `--text-muted` #444 → #7c7c7c (el muted
   daba ~2:1, por debajo del 4.5:1 mínimo para texto).
 - **Clases compartidas en `globals.css` (`@layer components`):** `.btn-primary`, `.btn-ghost`
@@ -341,7 +344,7 @@ accesibilidad, motion y tipografía. **Pendiente de aprobación del cliente** (v
 - Tema oscuro fijo, tokens CSS en `globals.css` (`--bg`, `--bg-surface`, `--bg-elevated`,
   `--border`, `--text-primary/secondary/muted`, `--accent` dorado `#c8a96e`). Se consumen como
   `var(--nombre)` directo en clases Tailwind (`bg-[var(--bg)]`), no como utilidades `bg-bg`.
-- Tipografía Geist (`next/font/google`), pesos 300–600. Títulos en `font-light`, tracking amplio
+- Tipografía: ver "Sistema visual" arriba (Outfit + Work Sans). Tracking amplio
   en labels/eyebrows (`tracking-[0.2em]` a `[0.3em]`, uppercase, texto chico — estas SÍ se dejan
   chicas a propósito, son decorativas).
 - **Tamaños de texto (2026-09-10):** el público del estudio incluye gente mayor, así que todo
@@ -357,8 +360,12 @@ accesibilidad, motion y tipografía. **Pendiente de aprobación del cliente** (v
   `gap-px bg-[var(--border)]` + celdas `bg-[var(--bg)]` para simular separadores finos (excepto
   el grid de /proyectos y el de destacados en Home, que usan gap real — ver `gridSpans.ts`).
 - Todas las imágenes de contenido (hero, galería, cards) van envueltas en `ProjectImage`, no en
-  `next/image` directo, para tener el fallback a placeholder. El logo en Navbar/Footer sí usa
-  `next/image` directo con `unoptimized` (son PNGs chicos, no necesitan pasar por el optimizador).
+  `next/image` directo, para tener el fallback a placeholder. El logo en Navbar/Footer usa
+  `next/image` directo (sin `ProjectImage`) y **sí pasa por el optimizador** (2026-10-14): antes
+  iba con `unoptimized` asumiendo PNGs chicos, pero `logo-bg1.png` pesa ~280KB a 2172px de ancho
+  para mostrarse a ~108px, y Lighthouse lo marcaba como el LCP de la Home. Los `width`/`height`
+  del `<Image>` son el tamaño en pantalla (Navbar 108x36, Footer 169x48), así Next genera
+  1x/2x a ese tamaño. Los PNG originales en `public/` no se tocaron.
 - **Responsive (2026-09-11):** auditado a mano en 320px, 375px y 768px de ancho (sin overflow
   horizontal en ninguna página) después de que el usuario reportara que faltaba pulir mobile.
   Bugs reales encontrados y arreglados:

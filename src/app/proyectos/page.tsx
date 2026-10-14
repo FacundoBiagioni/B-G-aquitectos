@@ -13,6 +13,8 @@ export const metadata: Metadata = {
     title: proyectosTitle,
     description: proyectosDescription,
     url: "/proyectos",
+    // Page-level openGraph replaces the layout's entirely, so set an image here.
+    images: [{ url: "/projects/benoit-51/hero.jpg", alt: "Benoit 51 — Estudio B+G Arquitectura" }],
   },
 };
 

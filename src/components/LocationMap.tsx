@@ -47,7 +47,13 @@ export default function LocationMap() {
         popupAnchor: [0, -8],
       });
 
-      L.marker(STUDIO_COORDS, { icon, alt: "Estudio B+G Arquitectura" })
+      L.marker(STUDIO_COORDS, {
+        icon,
+        alt: "Estudio B+G Arquitectura",
+        // divIcon markers ignore `alt`; `title` gives the marker (role=button)
+        // an accessible name.
+        title: "Estudio B+G Arquitectura — ver dirección",
+      })
         .addTo(map)
         .bindPopup(
           `<strong>Estudio B+G Arquitectura</strong><br/>
